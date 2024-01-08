@@ -1,0 +1,11 @@
+- Clusters
+    - [] Ajouter l'adresse d'un cluster LXD
+    - [] Manager plusieurs clusters
+    - [] Lister tous les containers
+- Containers
+    - [] Ajouter un container à des clusters
+    - [] Démarrer / Arrêter un container
+    - [] Accès aux consoles des containers
+- Snapshot
+    - [] Faire des snapshots des containers
+    - [] Faire des récupération données des snapshots
