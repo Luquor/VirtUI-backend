@@ -1,0 +1,92 @@
+main {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.button-3:focus {
+  box-shadow: rgba(46, 164, 79, .4) 0 0 0 3px;
+  outline: none;
+}
+
+.button-3:disabled {
+  background-color: #94d3a2;
+  border-color: rgba(27, 31, 35, .1);
+  color: rgba(255, 255, 255, .8);
+  cursor: default;
+}
+
+.button-3:active {
+  background-color: #298e46;
+  box-shadow: rgba(20, 70, 32, .2) 0 1px 0 inset;
+}
+.cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: start;
+}
+
+.card {
+    margin: 1em auto;
+    padding: 1em;
+    min-width: 18em;
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    border-radius: 5px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+.card-header h3 {
+    font-size: 1.5em;
+    font-weight: bold;
+    margin: 0;
+}
+
+.card-actions {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 1em;
+}
+
+.card-actions button {
+    padding: 0.5em 0.9em;
+    margin: 0 0.2em;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    color: #fff;
+}
+
+.start {
+    background-color: #2ea44f;
+}
+
+.start:hover {
+    background-color: #2c974b;
+}
+
+.stop {
+    background-color: #e74c3c;
+}
+
+.stop:hover {
+    background-color: #d64433;
+}
+
+.restart {
+    background-color: #3498db;
+}
+
+.restart:hover {
+    background-color: #2980b9;
+}
+
+.delete {
+    background-color: #e67e22;
+}
+
+.delete:hover {
+    background-color: #d45e0f;
+}
