@@ -43,5 +43,8 @@ func main() {
 		}
 	})
 
-	http.ListenAndServe(":80", nil)
+	err = http.ListenAndServe(":80", nil)
+	if err != nill {
+		log.Fatal(err)
+	}
 }
