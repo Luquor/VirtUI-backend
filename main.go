@@ -31,11 +31,13 @@ func main() {
 			r.ParseForm()
 			header := "Nouveaux containers"
 			status := "Démarré"
+
 			container := Container{Header: header, Status: status}
 			array = append(array, container)
-		}
 
-		log.Print(array)
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
 
 		err = tmpl.Execute(w, array)
 		if err != nil {
@@ -43,8 +45,8 @@ func main() {
 		}
 	})
 
-	err = http.ListenAndServe(":80", nil)
-	if err != nill {
+	err := http.ListenAndServe(":80", nil)
+	if err != nil {
 		log.Fatal(err)
 	}
 }
