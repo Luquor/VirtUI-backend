@@ -2,10 +2,13 @@ package models
 
 import (
 	"encoding/json"
+	"errors"
 	"log"
 	"time"
 	"virtui/api"
 )
+
+var containersList []Container
 
 type Container struct {
 	Metadata struct {
@@ -34,6 +37,27 @@ func IsContainerExist(nameC string) bool {
 	return true
 }
 
+func GetContainersFromLocalStorage() ([]Container, error) {
+	if containersList == nil {
+		return nil, errors.New("local containers list is empty, before get from local storage try with api (GetContainersFromApi())")
+	}
+	return containersList, nil
+}
+
+func GetContainerWithName(name string) Container {
+	GetContainersFromApi()
+	return containersList[getIdContainerWithName(name)]
+}
+
+func getIdContainerWithName(name string) int {
+	for i, container := range containersList {
+		if container.Metadata.Name == name {
+			return i
+		}
+	}
+	return 0
+}
+
 func GetContainersFromApi() []Container {
 	var containersDetail []Container
 	var containerDetail Container
@@ -46,6 +70,7 @@ func GetContainersFromApi() []Container {
 	if err != nil {
 		log.Fatal(err)
 	}
+	containersList = containersDetail
 	return containersDetail
 }
 

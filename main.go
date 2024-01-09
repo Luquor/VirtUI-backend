@@ -17,6 +17,11 @@ func main() {
 	for _, value := range models.GetContainersFromApi() {
 		fmt.Printf("%s\n", value.Metadata.Name)
 	}
+
+	fmt.Print(models.GetContainerWithName("noah"))
+
+	//webServer()
+
 }
 
 func webServer() {
