@@ -39,11 +39,13 @@ func webServer() {
 			r.ParseForm()
 			header := "Nouveaux containers"
 			status := "Démarré"
+
 			container := Container{Header: header, Status: status}
 			array = append(array, container)
-		}
 
-		log.Print(array)
+			http.Redirect(w, r, "/", http.StatusSeeOther)
+			return
+		}
 
 		err = tmpl.Execute(w, array)
 		if err != nil {
