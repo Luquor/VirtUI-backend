@@ -1,9 +1,11 @@
 package main
 
 import (
+	"fmt"
 	"html/template"
 	"log"
 	"net/http"
+	"virtui/models"
 )
 
 type Container struct {
@@ -12,6 +14,12 @@ type Container struct {
 }
 
 func main() {
+	for _, value := range models.GetContainersFromApi() {
+		fmt.Printf("%s\n", value.Metadata.Name)
+	}
+}
+
+func webServer() {
 	fs := http.FileServer(http.Dir("static/stylesheets"))
 	http.Handle("/static/stylesheets/", http.StripPrefix("/static/stylesheets/", fs))
 
@@ -43,8 +51,8 @@ func main() {
 		}
 	})
 
-	err = http.ListenAndServe(":80", nil)
-	if err != nill {
+	err := http.ListenAndServe(":8000", nil)
+	if err != nil {
 		log.Fatal(err)
 	}
 }
