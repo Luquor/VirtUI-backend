@@ -7,10 +7,10 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fs := http.FileServer(http.Dir("static/stylesheets"))
-		http.Handle("/static/stylesheets/", http.StripPrefix("/static/stylesheets/", fs))
+	fs := http.FileServer(http.Dir("static/stylesheets"))
+	http.Handle("/static/stylesheets/", http.StripPrefix("/static/stylesheets/", fs))
 
+	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		tmpl, err := template.ParseFiles("templates/index.html")
 		if err != nil {
 			log.Fatal(err)
