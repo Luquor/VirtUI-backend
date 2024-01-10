@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../static/stylesheets/form.css">
+    <title>Create a new LXC</title>
+</head>
+<body>
+    <main>
+        <div class="form-container">
+            <h1>Create a new LXC</h1>
+            <form action="/container" method="post">
+                <ul>
+                    <li>
+                        <label for="container_name">Name</label>
+                        <input type="text" id="container_name" name="container_name">
+                    </li>
+                    <li>
+                        <label for="container_image">Select an image</label>
+                        <select id="container_image" name="container_image">
+                            <option value="">-- Choose an image --</option>
+                            <option value="ubuntu">Ubuntu</option>
+                            <option value="debian">Debian</option>
+                            <option value="centos">CentOS</option>
+                            <option value="fedora">Fedora</option>
+                            <option value="arch">Arch Linux</option>
+                            <option value="alpine">Alpine Linux</option>
+                        </select>
+                    </li>
+                    <li>
+                        <button type="submit">Create</button>
+                    </li>
+                </ul>
+            </form>
+        </div>
+    </main>
+</body>
+</html>
