@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"time"
 	"virtui/api"
@@ -22,6 +23,14 @@ type Container struct {
 		StatusCode  int       `json:"status_code"`
 	} `json:"metadata"`
 	api.StandardReturn
+}
+
+type askCreateContainer struct {
+	Name   string `json:"name"`
+	Source struct {
+		Type        string `json:"type"`
+		Fingerprint string `json:"fingerprint"`
+	} `json:"source"`
 }
 
 type containers struct {
@@ -49,6 +58,22 @@ func GetContainerWithName(name string) Container {
 	return containersList[getIdContainerWithName(name)]
 }
 
+func CreateContainer(name string) string {
+	var data askCreateContainer
+	fingerprint := "1722a71a9f2dc0c68eac142a7d53ec728c15d2379e99f5b5545de99d440e3422"
+	dataJson := fmt.Sprintf("{\"name\":\"%s\",\"source\":{\"type\":\"image\",\"fingerprint\":\"%s\"}}", name, fingerprint)
+	err := json.Unmarshal([]byte(dataJson), &data)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return api.Cli.Post("/1.0/instances", data)
+}
+
+// Copyright : NOAH MANDLER pour le nom de la fonction :3
+func Exist(name string) bool {
+	return getIdContainerWithName(name) != 0
+}
+
 func getIdContainerWithName(name string) int {
 	for i, container := range containersList {
 		if container.Metadata.Name == name {
@@ -56,6 +81,14 @@ func getIdContainerWithName(name string) int {
 		}
 	}
 	return 0
+}
+
+func DeleteContainerWithName(name string) (string, error) {
+	GetContainersFromApi()
+	if Exist(name) {
+		return api.Cli.Delete(fmt.Sprintf("/1.0/instances/%s", name)), nil
+	}
+	return "", errors.New("Container doesn't exist")
 }
 
 func GetContainersFromApi() []Container {
@@ -67,6 +100,7 @@ func GetContainersFromApi() []Container {
 		err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &containerDetail)
 		containersDetail = append(containersDetail, containerDetail)
 	}
+	fmt.Println("Call API")
 	if err != nil {
 		log.Fatal(err)
 	}

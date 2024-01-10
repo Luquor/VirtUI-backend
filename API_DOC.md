@@ -13,3 +13,25 @@ curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/co
 ```
 
 Documentation API [ici](https://documentation.ubuntu.com/lxd/en/latest/api/#/)
+
+__Commande de test avec le certificat__
+```bash
+curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key -X POST
+```
+
+## Documentation temporaire  
+
+## Récupèrer les images
+
+https://127.0.0.1:8443/1.0/instances
+
+## Création d'une instance
+
+fingerprint correspond à l'id d'une image
+
+```bash
+curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key -X POST https://127.0.0.1:8443/1.0/instances -H "Content-Type: application/json" \ 
+  -d '{"name":"test56noah","source":{"type":"image","fingerprint":"1722a71a9f2dc0c68eac142a7d53ec728c15d2379e99f5b5545de99d440e3422"}}'| \
+   jq .metadata.id | sed 's/"//g' | \
+   curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key https://127.0.0.1:8443/1.0/operations/$(</dev/stdin) | jq .
+```

@@ -1,8 +1,10 @@
 package api
 
 import (
+	"bytes"
 	"crypto/tls"
 	"crypto/x509"
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -26,7 +28,19 @@ func (c Client) Get(endpoint string) string {
 
 // TO DO : Définir plus précisément le type de "data"
 func (c Client) Post(endpoint string, data any) string {
-	resp, _ := c.Client.Get(fmt.Sprintf("https://127.0.0.1:8443%s", endpoint))
+	jsonData, _ := json.Marshal(data)
+	reader := bytes.NewReader(jsonData)
+	resp, _ := c.Client.Post(fmt.Sprintf("https://127.0.0.1:8443%s", endpoint), "application/json", reader)
+	msg, _ := io.ReadAll(resp.Body)
+	return string(msg)
+}
+
+func (c Client) Delete(endpoint string) string {
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("https://127.0.0.1:8443%s", endpoint), nil)
+	if err != nil {
+		log.Fatal(err)
+	}
+	resp, _ := c.Client.Do(req)
 	msg, _ := io.ReadAll(resp.Body)
 	return string(msg)
 }

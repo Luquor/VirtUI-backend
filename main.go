@@ -2,54 +2,37 @@ package main
 
 import (
 	"fmt"
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"html/template"
 	"log"
 	"net/http"
+	"strconv"
+	"time"
 	"virtui/models"
 )
 
-type Container struct {
-	Header string
-	Status string
-}
-
 func main() {
-	for _, value := range models.GetContainersFromApi() {
-		fmt.Printf("%s\n", value.Metadata.Name)
-	}
-
-	fmt.Print(models.GetContainerWithName("noah"))
-
-	//webServer()
-
+	//test := models.CreateContainer("JeSuisLUCAS")
+	//fmt.Println(test)
+	webServer()
 }
 
 func webServer() {
 	fs := http.FileServer(http.Dir("static/stylesheets"))
 	http.Handle("/static/stylesheets/", http.StripPrefix("/static/stylesheets/", fs))
 
-	array := []Container{
-		Container{Header: "Portainer", Status: "Stoppé"},
-		Container{Header: "Grafana", Status: "Démarré"},
-		Container{Header: "Nginx Proxy Manager", Status: "Stoppé"},
-	}
+	r := chi.NewRouter()
+	r.Use(middleware.Logger)
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		w.Write([]byte("welcome"))
+	})
 
-	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+	r.Get("/", func(w http.ResponseWriter, r *http.Request) {
+		array := models.GetContainersFromApi()
 		tmpl, err := template.ParseFiles("templates/index.html")
 		if err != nil {
 			log.Fatal(err)
-		}
-
-		if r.Method == "POST" && r.URL.Path == "/" {
-			r.ParseForm()
-			header := "Nouveaux containers"
-			status := "Démarré"
-
-			container := Container{Header: header, Status: status}
-			array = append(array, container)
-
-			http.Redirect(w, r, "/", http.StatusSeeOther)
-			return
 		}
 
 		err = tmpl.Execute(w, array)
@@ -58,7 +41,14 @@ func webServer() {
 		}
 	})
 
-	err := http.ListenAndServe(":8000", nil)
+	r.Post("/container", func(w http.ResponseWriter, r *http.Request) {
+		r.ParseForm()
+		fmt.Println("Create container", models.CreateContainer("Nouveau"+strconv.FormatInt(time.Now().Unix(), 10)))
+		http.Redirect(w, r, "/", http.StatusSeeOther)
+		return
+	})
+
+	err := http.ListenAndServe(":8000", r)
 	if err != nil {
 		log.Fatal(err)
 	}

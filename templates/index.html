@@ -9,7 +9,7 @@
     <title>VirtUI</title>
 </head>
 <body>
-    <form action="/" method="post">
+    <form action="/container" method="post">
         <nav class="nav-bar">
             <button type="submit" name="action" value="new">Nouveau</button>
         </nav>
@@ -19,14 +19,17 @@
             {{ range . }}
             <div class="card">
                 <div class="card-header">
-                    <h3>{{ .Header }}</h3>
+                    <h3>{{ .Metadata.Name }}</h3>
                 </div>
                 <div class="card-status">
-                    <p>{{ .Status }}</p>
+                    <p>{{ .Metadata.Status }}</p>
                 </div>
                 <div class="card-actions">
-                    <button class="start">Lancer</button>
-                    <button class="stop">Stopper</button>
+                    {{ if eq .Metadata.Status "Running" }}
+                        <button class="stop">Stopper</button>
+                    {{ else }}
+                        <button class="start">Lancer</button>
+                    {{ end }}
                     <button class="restart">Relancer</button>
                     <button class="delete">Supprimer</button>
                 </div>
