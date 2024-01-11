@@ -1,7 +1,11 @@
 package models
 
 import (
+	"encoding/json"
+	"fmt"
+	"log"
 	"time"
+	"virtui/api"
 )
 
 type metaDataOperation struct {
@@ -32,7 +36,7 @@ type Operation struct {
 	Metadata   metaDataOperation `json:"metadata"`
 }
 
-type lastOperation struct {
+type lastOperations struct {
 	Type       string `json:"type"`
 	Status     string `json:"status"`
 	StatusCode int    `json:"status_code"`
@@ -40,10 +44,45 @@ type lastOperation struct {
 	ErrorCode  int    `json:"error_code"`
 	Error      string `json:"error"`
 	Metadata   struct {
-		Failure []metaDataOperation `json:"failure"`
-		Running []metaDataOperation `json:"running"`
+		Failure []string `json:"failure"`
+		Running []string `json:"running"`
 	} `json:"metadata"`
 }
 
-func GetLastOperation() {
+func OperationExist() bool {
+	var operations lastOperations
+	err := json.Unmarshal([]byte(api.Cli.Get("/1.0/operations")), &operations)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return len(operations.Metadata.Running) > 0
+}
+
+func getOperationWithID(id string) Operation {
+	var operationDetail Operation
+	err := json.Unmarshal([]byte(api.Cli.Get(fmt.Sprintf("/1.0/operations/%s", id))), &operationDetail)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return operationDetail
+}
+
+func GetLastOperation() Operation {
+	var operations lastOperations
+	var operationDetail Operation
+	err := json.Unmarshal([]byte(api.Cli.Get("/1.0/operations")), &operations)
+	if len(operations.Metadata.Running) == 0 {
+		for _, metadatum := range operations.Metadata.Failure {
+			err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &operationDetail)
+			return operationDetail
+		}
+	}
+	for _, metadatum := range operations.Metadata.Running {
+		err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &operationDetail)
+		return operationDetail
+	}
+	if err != nil {
+		log.Fatal(err)
+	}
+	return Operation{}
 }
