@@ -100,7 +100,6 @@ func GetContainersFromApi() []Container {
 		err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &containerDetail)
 		containersDetail = append(containersDetail, containerDetail)
 	}
-	fmt.Println("Call API")
 	if err != nil {
 		log.Fatal(err)
 	}

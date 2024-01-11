@@ -30,8 +30,15 @@ https://127.0.0.1:8443/1.0/instances
 fingerprint correspond à l'id d'une image
 
 ```bash
-curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key -X POST https://127.0.0.1:8443/1.0/instances -H "Content-Type: application/json" \ 
-  -d '{"name":"test56noah","source":{"type":"image","fingerprint":"1722a71a9f2dc0c68eac142a7d53ec728c15d2379e99f5b5545de99d440e3422"}}'| \
-   jq .metadata.id | sed 's/"//g' | \
-   curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key https://127.0.0.1:8443/1.0/operations/$(</dev/stdin) | jq .
+curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key -X POST https://127.0.0.1:8443/1.0/instances -H "Content-Type: application/json" -d '{"name":"test56noah","source":{"type":"image","fingerprint":"1722a71a9f2dc0c68eac142a7d53ec728c15d2379e99f5b5545de99d440e3422"}}'| jq .metadata.id | sed 's/"//g' | curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key https://127.0.0.1:8443/1.0/operations/$(</dev/stdin) | jq .
+```
+```bash
+curl -s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key -X POST https://127.0.0.1:8443/1.0/instances -H "Content-Type: application/json" -d '{"name":"test56noah","source":{"type":"image","fingerprint":"712a58368655"}}'| jq .metadata.id | sed 's/"//g' | 
+curl --include \
+--no-buffer \
+--header "Connection: Upgrade" \
+--header "Upgrade: websocket" \
+--header "Host: example.com:80" \
+--header "Sec-WebSocket-Version: 13" \
+-s -k --cert ~/snap/lxd/common/config/client.crt --key ~/snap/lxd/common/config/client.key https://127.0.0.1:8443/1.0/operations/$(</dev/stdin)
 ```
