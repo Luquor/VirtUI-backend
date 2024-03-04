@@ -135,7 +135,6 @@ func StopContainer(name string) (string, error) {
 		return "", errors.New("Container is already stopped")
 	}
 	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
-	}
 }
 
 /**
