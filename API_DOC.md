@@ -5,7 +5,7 @@ lxc config trust add
 # Récupèrer le token et le nom du client
 lxc remote add <nom> <token>
 ```
-A partir d'ici un certificat est une clé vont être généré dans ~/lxd/ ou ~/snap/lxd/common/config/
+A partir d'ici un certificat est une clé vont être généré dans ``~/lxd/``, ``~/snap/lxd/common/config/`` ou ``~/.config/lxc/``
 Pour interroger l'api il faut donc spécifié la clé et le cert : 
 
 ```
