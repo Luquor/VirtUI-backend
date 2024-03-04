@@ -41,10 +41,10 @@ type containers struct {
 	Metadata  []string `json:"metadata"`
 }
 
-func IsContainerExist(nameC string) bool {
+func IsContainerExist(name string) bool {
 	GetContainersFromApi()
 	for _, container := range containersList {
-		if container.Metadata.Name == nameC {
+		if container.Metadata.Name == name {
 			return true
 		}
 	}
@@ -115,6 +115,27 @@ func GetContainersFromApi() []Container {
 	}
 	containersList = containersDetail
 	return containersDetail
+}
+
+func StartContainer(name string) (string, error) {
+	if !IsContainerExist(name) {
+		log.Fatal("Container doesn't exist")
+	}
+	if GetContainerWithName(name).Metadata.Status == "Running" {
+		return "", errors.New("Container is already running")
+	}
+	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"start\"}"), nil
+}
+
+func StopContainer(name string) (string, error) {
+	if !IsContainerExist(name) {
+		log.Fatal("Container doesn't exist")
+	}
+	if GetContainerWithName(name).Metadata.Status == "Stopped" {
+		return "", errors.New("Container is already stopped")
+	}
+	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
+	}
 }
 
 /**
