@@ -11,8 +11,8 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/render"
 	"github.com/go-chi/cors"
+	"github.com/go-chi/render"
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
@@ -37,7 +37,8 @@ func createContainer(w http.ResponseWriter, r *http.Request) {
 func getContainers(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting all the containers...")
 	array, _ := json.Marshal(GetContainersFromApi())
-	w.Write(array)
+	// w.Write(array)
+	render.JSON(w, r, array)
 }
 
 func getContainer(w http.ResponseWriter, r *http.Request) {
@@ -64,12 +65,12 @@ func StartWebServer() {
 
 	r.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
-		AllowedOrigins:   []string{"https://*", "http://*"},
-		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"},
-		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
-		ExposedHeaders:   []string{"Link"},
-		MaxAge:           300, // Maximum value not ignored by any of major browsers
-	  }))
+		AllowedOrigins: []string{"https://*", "http://*"},
+		AllowedMethods: []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"},
+		AllowedHeaders: []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders: []string{"Link"},
+		MaxAge:         300, // Maximum value not ignored by any of major browsers
+	}))
 
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 	r.Use(middleware.Logger)
