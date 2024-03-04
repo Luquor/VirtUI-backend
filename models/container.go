@@ -41,9 +41,14 @@ type containers struct {
 	Metadata  []string `json:"metadata"`
 }
 
-// TO DO : Une vraie vérficiation svp
 func IsContainerExist(nameC string) bool {
-	return true
+	GetContainersFromApi()
+	for _, container := range containersList {
+		if container.Metadata.Name == nameC {
+			return true
+		}
+	}
+	return false
 }
 
 func GetContainersFromLocalStorage() ([]Container, error) {
