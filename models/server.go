@@ -12,6 +12,7 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/render"
+	"github.com/go-chi/cors"
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
@@ -30,7 +31,6 @@ func homepage(w http.ResponseWriter, r *http.Request) {
 func createContainer(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	fmt.Println("Create container", CreateContainer("Nouveau"+strconv.FormatInt(time.Now().Unix(), 10)))
-	http.Redirect(w, r, "/", http.StatusSeeOther)
 	w.Write([]byte("Create container"))
 }
 
@@ -61,6 +61,16 @@ func StartWebServer() {
 	log.Print("Starting web server...")
 
 	r := chi.NewRouter()
+
+	r.Use(cors.Handler(cors.Options{
+		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
+		AllowedOrigins:   []string{"https://*", "http://*"},
+		AllowedMethods:   []string{"GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS", "HEAD"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "X-CSRF-Token"},
+		ExposedHeaders:   []string{"Link"},
+		MaxAge:           300, // Maximum value not ignored by any of major browsers
+	  }))
+
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 	r.Use(middleware.Logger)
 
