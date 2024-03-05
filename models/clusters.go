@@ -53,6 +53,16 @@ func DeleteCluster(serverName string) (string, error) {
 	return "", errors.New("Cluster does not exist")
 }
 
+func GetContainersFromCluster(clusterName string) ([]Container, error) {
+	containersList := GetContainersFromApi()
+	for _, container := range containersList {
+		if container.Metadata.Location == clusterName {
+			return append(containersList, container), nil
+		}
+	}
+	return nil, errors.New("No containers found in cluster")
+}
+
 func getClustersFromApi() []Cluster {
 	var clustersDetail []Cluster
 	var clusterDetail Cluster

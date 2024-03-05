@@ -1,7 +1,7 @@
 - Clusters
   - [x] Ajouter l'adresse d'un cluster LXD
   - [] Manager plusieurs clusters
-  - [] Lister tous les containers
+  - [x] Lister tous les containers
 - Containers
   - [] Ajouter un container à des clusters
   - [x] Démarrer / Arrêter un container
