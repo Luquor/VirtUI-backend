@@ -48,7 +48,7 @@ func AddClusterAdress(cluster Cluster, group ClusterGroup) (string, error) {
 func DeleteCluster(serverName string) (string, error) {
 	getClustersFromApi()
 	if clustersExist(serverName) {
-		return api.Cli.Delete("/1.0/cluster/" + serverName), nil
+		return api.Cli.Delete("/1.0/cluster/members/" + serverName), nil
 	}
 	return "", errors.New("Cluster does not exist")
 }
