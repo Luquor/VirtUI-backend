@@ -30,9 +30,18 @@ type clusters struct {
 	Metadata  []string `json:"metadata"`
 }
 
-func CreateCluster(serverName string, clusterAddress string, clusterPort int, clusterName string) {
+// Il faut créer la fonction CreateCluster !
+// Trouver comment créer un cluster avec l'api !
+// // Il n'y a que que un de quoi créer un cluster group et non juste un seul.
+// func CreateCluster(serverName string, clusterAddress string, clusterPort int, clusterName string) {
+// 	 cluster := Cluster{}
+// 	 dataJson := `{"metadata": {"server_name": "` + serverName + `", "enabled": true, "member_config": [{"cluster_address": "` + clusterAddress + `", "cluster_port": ` + string(clusterPort) + `, "cluster_name": "` + clusterName + `"}]}}`
+// 	 err := json.Unmarshal([]byte(api.Cli.Post("/1.0/cluster", dataJson)), &cluster)
+// 	 if err != nil {
+// 	 	log.Fatal(err)
+// 	 }
 
-}
+// }
 
 func DeleteCluster(serverName string) (string, error) {
 	getClustersFromApi()
@@ -54,7 +63,7 @@ func getClustersFromApi() []Cluster {
 	if err != nil {
 		log.Fatal(err)
 	}
-	clustersList = clustersList
+	clustersList = clustersDetail
 	return clustersDetail
 }
 
