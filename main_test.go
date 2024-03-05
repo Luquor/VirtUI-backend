@@ -28,6 +28,7 @@ func list_lxd(nom string) string {
 	}
 	return string(instances)
 }
+//En attendant que le back soit fonctionnel j'ai fais cette fonction pour au moins tester mes test .
 func creationContain(nom string) {
 	cmd := exec.Command("curl", "-s", "-k", "--cert", "tls/client.crt", "--key", "tls/client.key", "-X", "POST", "https://127.0.0.1:8443/1.0/instances/"+nom)
 	instances, err := cmd.Output()
