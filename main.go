@@ -5,6 +5,10 @@ import (
 	"virtui/models"
 )
 
+/////////////////////////////
+
+// Fonction de comparaison de chaînes
+
 func main() {
 	test := models.CreateContainer("JeSuisLUCAS")
 	fmt.Println(test.Metadata.Description, test.Metadata.Id, test.Metadata.Status)

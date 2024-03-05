@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"os"
 	"testing"
@@ -62,9 +63,18 @@ func TestRunTests(t *testing.T) {
 
 	// Vérification du résultat des tests
 	if !ok {
-		fmt.Print(http.Get("127.0.0.1:8443/1.0/instances"))
+		out, err := (http.Get("https://127.0.0.1:8443/1.0"))
+		//out, err := exec.Command("lxc", "remote", "ls").Output()
+		if err != nil {
+			log.Fatal(err)
+			fmt.Println(out)
+			//fmt.Println(string(out))
+			t.Error("Les tests ont échoué.")
 
-		t.Error("Les tests ont échoué.")
+		}
+		//fmt.Println(string(out))
+		fmt.Println(out)
+
 	}
 }
 
