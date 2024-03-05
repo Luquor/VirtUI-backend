@@ -80,7 +80,7 @@ func CreateContainer(name string) Operation {
 }
 
 // Copyright : NOAH MANDLER pour le nom de la fonction :3
-func Exist(name string) bool {
+func exist(name string) bool {
 	return getIdContainerWithName(name) != 0
 }
 
@@ -95,7 +95,7 @@ func getIdContainerWithName(name string) int {
 
 func DeleteContainerWithName(name string) (string, error) {
 	GetContainersFromApi()
-	if Exist(name) {
+	if exist(name) {
 		return api.Cli.Delete(fmt.Sprintf("/1.0/instances/%s", name)), nil
 	}
 	return "", errors.New("Container doesn't exist")
@@ -136,14 +136,3 @@ func StopContainer(name string) (string, error) {
 	}
 	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
 }
-
-/**
-func (c Containers) GetContainerByName(nameC string) *Container {
-	var jsonDecode Container
-	err := json.Unmarshal([]byte(api.Cli.Get(fmt.Sprintf("1.0/containers/%s", nameC))), &jsonDecode)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return &jsonDecode
-}
-**/
