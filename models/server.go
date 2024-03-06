@@ -54,6 +54,48 @@ func deleteContainer(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(containerName))
 }
 
+func getClusters(w http.ResponseWriter, r *http.Request) {
+	log.Print("Getting all the clusters...")
+	// w.Write(array)
+	render.JSON(w, r, GetClustersFromApi())
+}
+
+func getCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Getting a cluster...")
+	name := chi.URLParam(r, "serverName")
+	dataJson, _ := GetClusterWithName(name)
+	render.JSON(w, r, dataJson)
+}
+
+// func addClusterAddress(w http.ResponseWriter, r *http.Request) {
+// 	cluster := chi.URLParam(r, "cluster")
+// 	group := chi.URLParam(r, "group")
+// 	log.Print("Creating a cluster...")
+
+// 	_, _ = AddClusterAddress(cluster, group)
+// 	w.Write([]byte("Create cluster"))
+// }
+
+func deleteCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Deleting a cluster...")
+	name := chi.URLParam(r, "name")
+	clusterName, _ := DeleteCluster(name)
+	w.Write([]byte(clusterName))
+}
+
+func getContainerFromCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Getting all the containers from a cluster...")
+	name := chi.URLParam(r, "cluster")
+	containerList, _ := GetContainersFromCluster(name)
+	render.JSON(w, r, containerList)
+}
+
+func redirectToSpecificContainer(w http.ResponseWriter, r *http.Request) {
+	log.Print("Redirecting to the container...")
+	container := chi.URLParam(r, "container")
+	http.Redirect(w, r, "/container/"+container, 301)
+}
+
 func StartWebServer() {
 	fs := http.FileServer(http.Dir("static/stylesheets"))
 	http.Handle("/static/stylesheets/", http.StripPrefix("/static/stylesheets/", fs))
@@ -79,6 +121,13 @@ func StartWebServer() {
 	r.Get("/containers", getContainers)
 	r.Get("/container/{name}", getContainer)
 	r.Delete("/container/{name}/", deleteContainer)
+
+	r.Get("/clusters", getClusters)
+	r.Get("/cluster/{cluster}", getCluster)
+	// r.Post("/cluster", addClusterAddress)
+	r.Delete("/cluster/{cluster}", deleteCluster)
+	r.Get("/cluster/{cluster}/container", getContainerFromCluster)
+	r.Get("cluster/{cluster}/container/{container}", redirectToSpecificContainer)
 
 	err := http.ListenAndServe(":8000", r)
 	if err != nil {
