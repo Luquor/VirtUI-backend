@@ -36,7 +36,7 @@ type clusters struct {
 }
 
 func AddClusterAdress(cluster Cluster, group ClusterGroup) (string, error) {
-	getClustersFromApi()
+	GetClustersFromApi()
 	if clustersExist(cluster.Metadata.ServerName) {
 		return "", errors.New("Cluster already exists")
 	}
@@ -46,7 +46,7 @@ func AddClusterAdress(cluster Cluster, group ClusterGroup) (string, error) {
 }
 
 func DeleteCluster(serverName string) (string, error) {
-	getClustersFromApi()
+	GetClustersFromApi()
 	if clustersExist(serverName) {
 		return api.Cli.Delete("/1.0/cluster/members/" + serverName), nil
 	}
@@ -63,7 +63,7 @@ func GetContainersFromCluster(clusterName string) ([]Container, error) {
 	return nil, errors.New("No containers found in cluster")
 }
 
-func getClustersFromApi() []Cluster {
+func GetClustersFromApi() []Cluster {
 	var clustersDetail []Cluster
 	var clusterDetail Cluster
 	var clusters clusters
@@ -80,7 +80,7 @@ func getClustersFromApi() []Cluster {
 }
 
 func clustersExist(serverName string) bool {
-	getClustersFromApi()
+	GetClustersFromApi()
 	for _, cluster := range clustersList {
 		if cluster.Metadata.ServerName == serverName {
 			return true
