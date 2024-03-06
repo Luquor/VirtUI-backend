@@ -17,7 +17,7 @@ import (
 
 func homepage(w http.ResponseWriter, r *http.Request) {
 	array := GetContainersFromApi()
-	tmpl, err := template.ParseFiles("templates/index.html")
+	tmpl, err := template.ParseFiles("index.html")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,8 +55,6 @@ func deleteContainer(w http.ResponseWriter, r *http.Request) {
 }
 
 func StartWebServer() {
-	fs := http.FileServer(http.Dir("static/stylesheets"))
-	http.Handle("/static/stylesheets/", http.StripPrefix("/static/stylesheets/", fs))
 
 	log.Print("Starting web server...")
 
