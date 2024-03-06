@@ -35,7 +35,7 @@ type clusters struct {
 	Metadata  []string `json:"metadata"`
 }
 
-func AddClusterAdress(cluster Cluster, group ClusterGroup) (string, error) {
+func AddClusterAddress(cluster Cluster, group ClusterGroup) (string, error) {
 	GetClustersFromApi()
 	if clustersExist(cluster.Metadata.ServerName) {
 		return "", errors.New("Cluster already exists")
@@ -77,6 +77,20 @@ func GetClustersFromApi() []Cluster {
 	}
 	clustersList = clustersDetail
 	return clustersDetail
+}
+
+func GetClusterWithName(serverName string) (Cluster, error) {
+	GetClustersFromApi()
+	return clustersList[getIdClusterWithName(serverName)], nil
+}
+
+func getIdClusterWithName(serverName string) int {
+	for i, cluster := range clustersList {
+		if cluster.Metadata.ServerName == serverName {
+			return i
+		}
+	}
+	return 0
 }
 
 func clustersExist(serverName string) bool {
