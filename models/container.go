@@ -66,7 +66,7 @@ func GetContainerWithName(name string) Container {
 func CreateContainer(name string) Operation {
 	var data askCreateContainer
 	var operation Operation
-	fingerprint := "1722a71a9f2dc0c68eac142a7d53ec728c15d2379e99f5b5545de99d440e3422"
+	fingerprint := "175d0420d429"
 	dataJson := fmt.Sprintf("{\"name\":\"%s\",\"source\":{\"type\":\"image\",\"fingerprint\":\"%s\"}}", name, fingerprint)
 	err := json.Unmarshal([]byte(dataJson), &data)
 	if err != nil {
