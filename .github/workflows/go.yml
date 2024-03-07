@@ -28,7 +28,7 @@ jobs:
       with:
         lxd_version: default
     - name: recupération
-      run: cp ~/snap/lxd/common/config/client.crt ./tls/
+      run: ls -ll ~/snap/lxd/common/config/
            
     - name: Build
       run: go build 
