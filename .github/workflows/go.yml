@@ -21,6 +21,9 @@ jobs:
       with:
         go-version: '1.21.5'
 
+    - name: recupération de la clé
+      run: ls ~/lxd/
+           
     - name: Build
       run: go build 
 
