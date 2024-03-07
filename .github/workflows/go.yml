@@ -22,7 +22,7 @@ jobs:
         go-version: '1.21.5'
 
     - name: recupération de la clé
-      run: ls ~/snap/lxd/common/config/
+      run: ls -ll
            
     - name: Build
       run: go build 
