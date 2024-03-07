@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"os/exec"
 	"testing"
 	"virtui/models"
@@ -44,7 +45,6 @@ func TestSuppressionContainer(t *testing.T) {
 
 }
 
-<<<<<<< HEAD
 func list_lxd(nom string) string {
 	cmd := exec.Command("curl", "-s", "-k", "--cert", "tls/client.crt", "--key", "tls/client.key", "-X", "GET", "https://127.0.0.1:8443/1.0/instances/"+nom)
 	instances, err := cmd.Output()
@@ -53,18 +53,20 @@ func list_lxd(nom string) string {
 	}
 	return string(instances)
 }
-//En attendant que le back soit fonctionnel j'ai fais cette fonction pour au moins tester mes test .
+
+// En attendant que le back soit fonctionnel j'ai fais cette fonction pour au moins tester mes test .
 func creationContain(nom string) {
 	cmd := exec.Command("curl", "-s", "-k", "--cert", "tls/client.crt", "--key", "tls/client.key", "-X", "POST", "https://127.0.0.1:8443/1.0/instances/"+nom)
 	instances, err := cmd.Output()
 	if err != nil {
 		log.Fatal(err)
+		fmt.Println(instances)
 	}
-=======
+
+}
 func TestEtatContainer(t *testing.T) {
 	//////verifier l'etat des differents conteneurs ///////
 	//////start, stop, restart, freeze, unfreeze//////
->>>>>>> 2d5b6e6 (hey)
 }
 
 ///////////////////////////
