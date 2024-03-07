@@ -1,0 +1,9 @@
+{
+    "name": "server",
+    "source": {
+      "alias": "22.04",
+      "protocol": "simplestreams",
+      "server": "https://cloud-images.ubuntu.com/releases",
+      "type": "image"
+    }
+  }
