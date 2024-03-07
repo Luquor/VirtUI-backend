@@ -27,12 +27,12 @@ jobs:
       uses: whywaita/setup-lxd@v1
       with:
         lxd_version: default
-          
+    - name: recupération
+      run: ls ~/snap
            
     - name: Build
       run: go build 
 
     - name: Test
       run: go test 
-    - name: recupération
-      run: ls ~/snap
+  
