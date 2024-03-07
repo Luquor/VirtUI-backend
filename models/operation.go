@@ -58,7 +58,7 @@ func OperationExist() bool {
 	return len(operations.Metadata.Running) > 0
 }
 
-func getOperationWithID(id string) Operation {
+func GetOperationWithID(id string) Operation {
 	var operationDetail Operation
 	err := json.Unmarshal([]byte(api.Cli.Get(fmt.Sprintf("/1.0/operations/%s", id))), &operationDetail)
 	if err != nil {

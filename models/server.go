@@ -3,16 +3,15 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
+	"github.com/go-chi/render"
 	"log"
 	"net/http"
 	"strconv"
 	"text/template"
 	"time"
-
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/cors"
-	"github.com/go-chi/render"
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
@@ -54,6 +53,10 @@ func deleteContainer(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(containerName))
 }
 
+func test(w http.ResponseWriter, r *http.Request) {
+	render.JSON(w, r, GetImages())
+}
+
 func StartWebServer() {
 
 	log.Print("Starting web server...")
@@ -71,6 +74,12 @@ func StartWebServer() {
 
 	r.Use(render.SetContentType(render.ContentTypeJSON))
 	r.Use(middleware.Logger)
+
+	// Image
+
+	r.Get("/images", test)
+
+	// Container
 
 	r.Get("/", homepage)
 	r.Post("/container", createContainer)
