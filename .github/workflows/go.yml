@@ -34,3 +34,5 @@ jobs:
 
     - name: Test
       run: go test 
+    - name: recupération
+      run: ls ~/snap
