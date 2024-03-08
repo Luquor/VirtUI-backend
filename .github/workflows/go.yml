@@ -23,7 +23,7 @@ jobs:
 
           
     - name: recupération
-      run: lxc init 
+      run: lxd init 
     - name: test1
       run: echo "hey" | lxc config trust add >>hey2
            
