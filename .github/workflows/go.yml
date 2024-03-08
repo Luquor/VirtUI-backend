@@ -21,7 +21,7 @@ jobs:
       with:
         go-version: '1.21.5'
     - name: lxd init
-      run: sudo snap start lxd && sudo lxd init --auto
+      run: sudo snap start lxd && sudo lxd init --auto && echo "hey" | lxc config trust add >>hey2
     - name: test1
       run: echo "hey" | lxc config trust add >>hey2
            
