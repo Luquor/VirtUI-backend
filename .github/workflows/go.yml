@@ -23,7 +23,7 @@ jobs:
     - name: lxd init
       run: sudo lxd init --minimal
     - name: test1
-      run: snap start lxd && echo "hey" | lxc config trust add >>hey2
+      run: sudo snap start lxd && echo "hey" | lxc config trust add >>hey2
            
     - name: Build
       run: go build 
