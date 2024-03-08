@@ -25,7 +25,7 @@ jobs:
         #snap help refresh
         #sudo snap install lxd
         sudo lxd init --auto --network-address=0.0.0.0 --network-port=8443
-        sudo lxc launch ubuntu:22.04 ubuntu-container
+        #sudo lxc launch ubuntu:22.04 ubuntu-container
 
     #- name: Start LXD or Initialize if not started
      # run: |
