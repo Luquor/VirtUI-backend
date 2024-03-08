@@ -21,7 +21,7 @@ jobs:
       with:
         go-version: '1.21.5'
     - name: lxd init
-      run: sudo lxd init --auto --network-address=0.0.0.0 --network-port=8443
+      run: sudo lxd init --minimal
     - name: test1
       run: echo "hey" | lxc config trust add >>hey2
            
