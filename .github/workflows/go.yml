@@ -22,9 +22,9 @@ jobs:
         go-version: '1.21.5'
     - name: Install LXD
       run: |
-        snap help refresh
-        sudo snap install lxd
-        lxd init --auto
+        #snap help refresh
+        #sudo snap install lxd
+        #lxd init --auto
         lxc launch ubuntu:22.04 ubuntu-container
 
     #- name: Start LXD or Initialize if not started
