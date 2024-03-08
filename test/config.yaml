@@ -7,4 +7,3 @@ networks:
   config:
     ipv4.address: auto
     ipv6.address: none
-EOF
