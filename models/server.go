@@ -9,28 +9,27 @@ import (
 	"github.com/go-chi/render"
 	"log"
 	"net/http"
-	"strconv"
 	"text/template"
-	"time"
+	"virtui/api/modelsResponse"
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
-	array := GetContainersFromApi()
-	tmpl, err := template.ParseFiles("index.html")
+	_, err := template.ParseFiles("index.html")
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	err = tmpl.Execute(w, array)
-	if err != nil {
-		log.Fatal(err)
-	}
 }
 
 func createContainer(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
-	fmt.Println("Create container", CreateContainer("Nouveau"+strconv.FormatInt(time.Now().Unix(), 10)))
-	w.Write([]byte("Create container"))
+	jsonResponse := modelsResponse.AddContainerResponse{}
+	json.NewDecoder(r.Body).Decode(&jsonResponse)
+	operation := CreateContainer(jsonResponse.Name, jsonResponse.Fingerprint)
+	fmt.Println("Création d'un container (Status) : ", operation.Status, " ...")
+	fmt.Println("Operation (status) :", GetOperationWithID(operation.Metadata.Id).Status)
+	//fmt.Println("Create container", CreateContainer("Nouveau"+strconv.FormatInt(time.Now().Unix(), 10)))
+	w.Write([]byte(fmt.Sprintf("Creating container... : %s", jsonResponse.Name)))
 }
 
 func getContainers(w http.ResponseWriter, r *http.Request) {
