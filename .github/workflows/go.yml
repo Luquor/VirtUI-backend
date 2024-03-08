@@ -24,7 +24,16 @@ jobs:
       run: systemctl start lxd || systemctl status lxd || sudo lxd init --auto
     - name: test1
       run: ls && echo "hey" | lxc config trust add >>hey2
-           
+
+    - name: Install LXD
+      run: |
+        apt-get update
+        apt-get install -y lxd
+
+    - name: Start LXD or Initialize if not started
+      run: |
+        systemctl start lxd || (systemctl status lxd && exit 1) || sudo lxd init --auto
+      
     - name: Build
       run: go build 
 
