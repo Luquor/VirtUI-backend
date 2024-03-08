@@ -28,7 +28,7 @@ jobs:
       with:
         lxd_version: default
     - name: recupération
-      run: ls -ll ~/snap/lxd/common/config/
+      run: echo "hey" >> lxc config trust add >>hey
            
     - name: Build
       run: go build 
