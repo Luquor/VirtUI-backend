@@ -14,11 +14,16 @@ import (
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
-	_, err := template.ParseFiles("index.html")
+	array := GetContainersFromApi()
+	tmpl, err := template.ParseFiles("index.html")
 	if err != nil {
 		log.Fatal(err)
 	}
 
+	err = tmpl.Execute(w, array)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func createContainer(w http.ResponseWriter, r *http.Request) {
@@ -36,6 +41,20 @@ func getContainers(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting all the containers...")
 	// w.Write(array)
 	render.JSON(w, r, GetContainersFromApi())
+}
+
+func startContainer(w http.ResponseWriter, r *http.Request) {
+	log.Print("Start a container...")
+	name := chi.URLParam(r, "name")
+	StartContainer(name)
+	w.Write([]byte(fmt.Sprint("Starting... : ", name)))
+}
+
+func stopContainer(w http.ResponseWriter, r *http.Request) {
+	log.Print("Stopping a container...")
+	name := chi.URLParam(r, "name")
+	StopContainer(name)
+	w.Write([]byte(fmt.Sprint("Stopping... : ", name)))
 }
 
 func getContainer(w http.ResponseWriter, r *http.Request) {
@@ -84,6 +103,8 @@ func StartWebServer() {
 	r.Post("/container", createContainer)
 	r.Get("/containers", getContainers)
 	r.Get("/container/{name}", getContainer)
+	r.Put("/container/{name}/start", startContainer)
+	r.Put("/container/{name}/stop", stopContainer)
 	r.Delete("/container/{name}/", deleteContainer)
 
 	err := http.ListenAndServe(":8000", r)

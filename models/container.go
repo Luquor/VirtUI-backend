@@ -33,6 +33,14 @@ type askCreateContainer struct {
 	} `json:"source"`
 }
 
+// Action possible : start, stop, restart, freeze, unfreeze
+type askState struct {
+	Action   string `json:"action"`
+	Force    bool   `json:"force"`
+	Stateful bool   `json:"stateful"`
+	Timeout  int    `json:"timeout"`
+}
+
 type containers struct {
 	api.StandardReturn
 	Operation string   `json:"operation"`
@@ -124,7 +132,7 @@ func StartContainer(name string) (string, error) {
 	if GetContainerWithName(name).Metadata.Status == "Running" {
 		return "", errors.New("Container is already running")
 	}
-	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"start\"}"), nil
+	return api.Cli.Put(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"start\"}"), nil
 }
 
 func StopContainer(name string) (string, error) {
@@ -134,7 +142,7 @@ func StopContainer(name string) (string, error) {
 	if GetContainerWithName(name).Metadata.Status == "Stopped" {
 		return "", errors.New("Container is already stopped")
 	}
-	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
+	return api.Cli.Put(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
 }
 
 /**

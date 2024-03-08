@@ -45,6 +45,14 @@ func (c Client) Delete(endpoint string) string {
 	return string(msg)
 }
 
+func (c Client) Put(endpoint string, data any) string {
+	jsonData, _ := json.Marshal(data)
+	reader := bytes.NewReader(jsonData)
+	resp, _ := c.Client.Post(fmt.Sprintf("https://127.0.0.1:8443%s", endpoint), "application/json", reader)
+	msg, _ := io.ReadAll(resp.Body)
+	return string(msg)
+}
+
 var (
 	CACertFilePath = "tls/api_server.crt"
 	CertFilePath   = "tls/client.crt"
