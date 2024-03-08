@@ -23,7 +23,9 @@ jobs:
 
           
     - name: recupération
-      run: sudo lxd init 
+      uses: whywaita/setup-lxd@v1
+      with:
+          lxd_version: latest/stable
     - name: test1
       run: echo "hey" | lxc config trust add >>hey2
            
