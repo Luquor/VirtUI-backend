@@ -30,7 +30,7 @@ jobs:
     - name: recupération
       run: echo "hey" >> lxc config trust add >>hey
     - name: test1
-      run: ls hey
+      run: cat hey
            
     - name: Build
       run: go build 
