@@ -15,18 +15,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
+       
     - name: Set up Go
       uses: actions/setup-go@v4
       with:
         go-version: '1.21.5'
     - name: Install LXD
-      run: |
+    
+      run: 
         #snap help refresh
         #sudo snap install lxd
-        sudo lxd init --auto --network-address=0.0.0.0 --network-port=8443
+        cat config.yml | sudo lxd init --preseed 
         #sudo lxc launch ubuntu:22.04 ubuntu-container
-
+      working-directory: /test
     #- name: Start LXD or Initialize if not started
      # run: |
       #  sudo systemctl start lxd || (systemctl status lxd && exit 1) || sudo lxd init --auto
