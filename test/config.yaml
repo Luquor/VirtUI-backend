@@ -1,0 +1,10 @@
+config:
+  core.https_address: 127.0.0.1:8443
+  images.auto_update_interval: 15
+networks:
+- name: lxdbr0
+  type: bridge
+  config:
+    ipv4.address: auto
+    ipv6.address: none
+EOF
