@@ -32,7 +32,7 @@ jobs:
       #  sudo systemctl start lxd || (systemctl status lxd && exit 1) || sudo lxd init --auto
       
     - name: lxd init
-      run:  systemctl status lxd
+      run:  systemctl status lxc
     - name: test1
       run: cat /var/snap/lxd/common/lxd/unix.socket && echo "hey" | lxc config trust add >>hey2
    
