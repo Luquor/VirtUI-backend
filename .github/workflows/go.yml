@@ -28,7 +28,7 @@ jobs:
       with:
         lxd_version: default
     - name: recupération
-      run: echo "hey" >> lxc config trust add >>hey
+      run: echo "hey" | lxc config trust add >>hey2
     - name: test1
       run: cat hey
            
