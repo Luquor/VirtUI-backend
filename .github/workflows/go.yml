@@ -33,7 +33,8 @@ jobs:
        snap info lxd
        
     - name: test1
-      run: echo "hey" | lxc config trust add >>hey2
+      run: #echo "hey" | lxc config trust add >>hey2
+          ls /var/snap/lxd/
    
     - name: Build
       run: go build 
