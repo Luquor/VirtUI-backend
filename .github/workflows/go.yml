@@ -33,6 +33,7 @@ jobs:
       run: #echo "hey" | lxc config trust add >>hey2
          # ls -ll /var/snap/lxd/common/
         sudo cat config.yaml | sudo lxd init --preseed
+        echo "hey" | lxc config trust add >>hey2
       working-directory: test
 
     - name: Build
