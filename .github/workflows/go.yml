@@ -28,7 +28,7 @@ jobs:
         #sudo systemctl start snap.lxd.daemon.unix.socket
         #sudo systemctl status snap.lxd.daemon.unix.socket
         #sudo lxc launch ubuntu:22.04 ubuntu-container
-        cat /var/snap/lxd/common/lxd/unix.socket
+        sudo cat /var/snap/lxd/common/lxd/unix.socket
       working-directory: test
    
     - name: test1
