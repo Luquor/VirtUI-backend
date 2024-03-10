@@ -34,7 +34,7 @@ jobs:
        
     - name: test1
       run: #echo "hey" | lxc config trust add >>hey2
-          ls /var/snap/lxd/
+          ls /var/snap/lxd/common/
    
     - name: Build
       run: go build 
