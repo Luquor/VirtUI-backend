@@ -26,7 +26,7 @@ jobs:
         #snap help refresh
         #sudo snap install lxd
         sudo systemctl start snap.lxd.daemon.unix.socket
-        sudo systemctl status snap.lxd.daemon.unix.socket
+        #sudo systemctl status snap.lxd.daemon.unix.socket
         #sudo lxc launch ubuntu:22.04 ubuntu-container
       working-directory: test
    
