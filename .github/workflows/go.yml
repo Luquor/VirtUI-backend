@@ -32,7 +32,7 @@ jobs:
     - name: test1
       run: #echo "hey" | lxc config trust add >>hey2
          # ls -ll /var/snap/lxd/common/
-        sudo   ./snap/lxd init
+        sudo   ls /snap/lxd/
    
     - name: Build
       run: go build 
