@@ -16,10 +16,10 @@ jobs:
     steps:
     - uses: actions/checkout@v3
        
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: '1.21.5'
+   # - name: Set up Go
+    #  uses: actions/setup-go@v4
+     # with:
+      #  go-version: '1.21.5'
     - name: Install LXD
     
       run: 
@@ -30,8 +30,8 @@ jobs:
       working-directory: test
     - name: Start LXD or Initialize if not started
       run: |
-        sudo systemctl status lxd
-    
+       snap info lxd
+       
     - name: test1
       run: echo "hey" | lxc config trust add >>hey2
    
