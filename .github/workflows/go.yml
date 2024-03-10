@@ -25,14 +25,14 @@ jobs:
       run: 
         #snap help refresh
         #sudo snap install lxd
-        cat config.yaml | sudo lxd init --preseed 
+        whereis lxd
         #sudo lxc launch ubuntu:22.04 ubuntu-container
       working-directory: test
    
     - name: test1
       run: #echo "hey" | lxc config trust add >>hey2
          # ls -ll /var/snap/lxd/common/
-        sudo /snap/bin/lxd --help
+        sudo cat config.yaml | sudo /snap/bin/lxd --preseed
    
     - name: Build
       run: go build 
