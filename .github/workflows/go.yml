@@ -30,6 +30,7 @@ jobs:
         sudo apt install lvm2 thin-provisioning-tools
         sudo apt install btrfs-progs
         sudo apt install busybox-static curl gettext jq sqlite3 socat bind9-dnsutils
+        echo "root:1000000:1000000000" | sudo tee -a /etc/subuid /etc/subgid
         
       working-directory: test
 
