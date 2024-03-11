@@ -3,14 +3,15 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
-	"github.com/go-chi/cors"
-	"github.com/go-chi/render"
 	"log"
 	"net/http"
 	"text/template"
 	"virtui/api/modelsResponse"
+
+	"github.com/go-chi/chi"
+	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
+	"github.com/go-chi/render"
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
