@@ -8,6 +8,7 @@ import (
 )
 
 var clustersList []Cluster
+var clusterGroupsList []ClusterGroup
 
 type Cluster struct {
 	Metadata struct {
@@ -35,14 +36,23 @@ type clusters struct {
 	Metadata  []string `json:"metadata"`
 }
 
-func AddClusterAddress(cluster Cluster, group ClusterGroup) (string, error) {
-	GetClustersFromApi()
-	if clustersExist(cluster.Metadata.ServerName) {
-		return "", errors.New("Cluster already exists")
+//	func AddClusterAddress(cluster Cluster, group ClusterGroup) (string, error) {
+//		GetClustersFromApi()
+//		if clustersExist(cluster.Metadata.ServerName) {
+//			return "", errors.New("Cluster already exists")
+//		}
+//		groups := group
+//		groups.Members = append(groups.Members, cluster.Metadata.ServerName)
+//		return api.Cli.Post("/1.0/cluster/groups", groups), nil
+//	}
+func CreateCluster(group ClusterGroup, clusters ...Cluster) (string, error) {
+	for i := range clusters {
+		if !clustersExist(clusters[i].Metadata.ServerName) {
+			return "", errors.New("Cluster does not exists")
+		}
+		group.Members = append(group.Members, clusters[i].Metadata.ServerName)
 	}
-	groups := group
-	groups.Members = append(groups.Members, cluster.Metadata.ServerName)
-	return api.Cli.Post("/1.0/cluster/groups", groups), nil
+	return api.Cli.Post("/1.0/cluster/groups", group), nil
 }
 
 func DeleteCluster(serverName string) (string, error) {
@@ -84,9 +94,23 @@ func GetClusterWithName(serverName string) (Cluster, error) {
 	return clustersList[getIdClusterWithName(serverName)], nil
 }
 
+func GetClusterGroupWithName(groupName string) (ClusterGroup, error) {
+	GetClustersFromApi()
+	return clusterGroupsList[getIdClusterGroupWithName(groupName)], nil
+}
+
 func getIdClusterWithName(serverName string) int {
 	for i, cluster := range clustersList {
 		if cluster.Metadata.ServerName == serverName {
+			return i
+		}
+	}
+	return 0
+}
+
+func getIdClusterGroupWithName(groupName string) int {
+	for i, group := range clusterGroupsList {
+		if group.Name == groupName {
 			return i
 		}
 	}
