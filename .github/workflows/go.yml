@@ -23,7 +23,7 @@ jobs:
     - name: Install LXD
     
       run: |
-        snap refresh
+        sudo snap refresh
         sudo snap install lxd
         #sudo systemctl start snap.lxd.daemon.unix.socket
         #sudo systemctl status snap.lxd.daemon.unix.socket
