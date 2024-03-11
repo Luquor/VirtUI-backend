@@ -36,6 +36,7 @@ jobs:
     - name: test1
       run: #echo "hey" | lxc config trust add >>hey2
          # ls -ll /var/snap/lxd/common/
+        sudo systemctl status snap.lxd.daemon
         sudo cat config.yaml | sudo lxd init --preseed
         echo "hey" | lxc config trust add >>hey2
       working-directory: test
