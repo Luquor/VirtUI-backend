@@ -31,6 +31,8 @@ jobs:
         #systemd-socket-activate -l 9595 lxd &
         #sudo systemctl start snap.lxd.daemon &&
         sudo cat config.yaml | sudo lxd init --preseed
+      working-directory: test
+
     - name: Trust
       run: echo "hey" | lxc config trust add >>hey2
         
