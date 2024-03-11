@@ -91,6 +91,22 @@ func deleteCluster(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(clusterName))
 }
 
+func createContainerFromCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Creating a container from a cluster...")
+	cluster := chi.URLParam(r, "cluster")
+	container := chi.URLParam(r, "container")
+	_ = CreateContainerFromCluster(cluster, container)
+	w.Write([]byte("Create container from cluster"))
+}
+
+func deleteContainerFromCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Deleting a container from a cluster...")
+	cluster := chi.URLParam(r, "cluster")
+	container := chi.URLParam(r, "container")
+	_ = DeleteContainerFromCluster(cluster, container)
+	w.Write([]byte("Delete container from cluster"))
+}
+
 func getContainerFromCluster(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting all the containers from a cluster...")
 	name := chi.URLParam(r, "cluster")
@@ -134,6 +150,8 @@ func StartWebServer() {
 	r.Get("/cluster/{cluster}", getCluster)
 	r.Post("/cluster", createCluster)
 	r.Delete("/cluster/{cluster}", deleteCluster)
+	r.Post("/cluster/{cluster}/container", createContainerFromCluster)
+	r.Delete("/cluster/{cluster}/container/{container}", deleteContainerFromCluster)
 	r.Get("/cluster/{cluster}/container", getContainerFromCluster)
 	r.Get("cluster/{cluster}/container/{container}", redirectToSpecificContainer)
 
