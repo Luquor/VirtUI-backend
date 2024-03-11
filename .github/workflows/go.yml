@@ -29,7 +29,8 @@ jobs:
         #sudo systemctl status snap.lxd.daemon.unix.socket
         #sudo lxc launch ubuntu:22.04 ubuntu-container
         #systemd-socket-activate -l 9595 lxd &
-        systemctl start snap.lxd.daemon
+        sudo systemctl start snap.lxd.daemon
+        
       working-directory: test
    
     - name: test1
