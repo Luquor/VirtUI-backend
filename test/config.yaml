@@ -3,7 +3,6 @@ config:
   images.auto_update_interval: 0
   storage: zfs
 preseed: |
-  config: {}
   cluster: {}
   networks: []
   storage_pools: []
