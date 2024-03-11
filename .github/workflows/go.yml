@@ -30,7 +30,7 @@ jobs:
         #sudo lxc launch ubuntu:22.04 ubuntu-container
         #systemd-socket-activate -l 9595 lxd &
         #sudo systemctl start snap.lxd.daemon &&
-        sudo cat config.yaml | sudo lxd init --preseed --syslog && sudo ls /var/l
+        sudo cat config.yaml | sudo lxd init --preseed --syslog && sudo ls /var/log
       working-directory: test
 
     - name: Trust
