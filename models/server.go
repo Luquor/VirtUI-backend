@@ -75,6 +75,82 @@ func getImages(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, GetImages())
 }
 
+func getClusters(w http.ResponseWriter, r *http.Request) {
+	log.Print("Getting all the clusters...")
+	// w.Write(array)
+	render.JSON(w, r, GetClustersFromApi())
+}
+
+func getCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Getting a cluster...")
+	name := chi.URLParam(r, "serverName")
+	dataJson, _ := GetClusterWithName(name)
+	render.JSON(w, r, dataJson)
+}
+
+// func addClusterAddress(w http.ResponseWriter, r *http.Request) {
+// 	cluster := chi.URLParam(r, "cluster")
+// 	group := chi.URLParam(r, "group")
+// 	log.Print("Creating a cluster...")
+
+//		_, _ = AddClusterAddress(cluster, group)
+//		w.Write([]byte("Create cluster"))
+//	}
+func createCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Creating a cluster...")
+	group, _ := GetClusterGroupWithName(chi.URLParam(r, "group"))
+	clusterName, _ := GetClusterWithName(chi.URLParam(r, "cluster"))
+
+	_, _ = CreateCluster(group, clusterName)
+	w.Write([]byte("Create cluster"))
+}
+
+func deleteCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Deleting a cluster...")
+	name := chi.URLParam(r, "name")
+	clusterName, _ := DeleteCluster(name)
+	w.Write([]byte(clusterName))
+}
+
+func createContainerFromCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Creating a container from a cluster...")
+	cluster := chi.URLParam(r, "cluster")
+	container := chi.URLParam(r, "container")
+	_ = CreateContainerFromCluster(cluster, container)
+	w.Write([]byte("Create container from cluster"))
+}
+
+func deleteContainerFromCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Deleting a container from a cluster...")
+	cluster := chi.URLParam(r, "cluster")
+	container := chi.URLParam(r, "container")
+	_ = DeleteContainerFromCluster(cluster, container)
+	w.Write([]byte("Delete container from cluster"))
+}
+
+func getContainerFromCluster(w http.ResponseWriter, r *http.Request) {
+	log.Print("Getting all the containers from a cluster...")
+	name := chi.URLParam(r, "cluster")
+	containerList, _ := GetContainersFromCluster(name)
+	render.JSON(w, r, containerList)
+}
+
+func redirectToSpecificContainer(w http.ResponseWriter, r *http.Request) {
+	log.Print("Redirecting to the container...")
+	container := chi.URLParam(r, "container")
+	http.Redirect(w, r, "/container/"+container, 301)
+}
+
+// container/{container}/actions (start, stop, restart => bodyparams)
+func controlContainer(w http.ResponseWriter, r *http.Request) {
+	log.Print("Control a container...")
+	container := chi.URLParam(r, "container")
+	r.ParseForm()
+	action := r.FormValue("action")
+	_, _ = ControlContainerWithName(container, action)
+	w.Write([]byte("Container " + action + "ed"))
+}
+
 func StartWebServer() {
 
 	log.Print("Starting web server...")
@@ -106,6 +182,17 @@ func StartWebServer() {
 	r.Put("/container/{name}/start", startContainer)
 	r.Put("/container/{name}/stop", stopContainer)
 	r.Delete("/container/{name}/", deleteContainer)
+
+	r.Get("/clusters", getClusters)
+	r.Get("/cluster/{cluster}", getCluster)
+	r.Post("/cluster", createCluster)
+	r.Delete("/cluster/{cluster}", deleteCluster)
+	r.Post("/cluster/{cluster}/container", createContainerFromCluster)
+	r.Delete("/cluster/{cluster}/container/{container}", deleteContainerFromCluster)
+	r.Get("/cluster/{cluster}/container", getContainerFromCluster)
+	r.Get("/cluster/{cluster}/container/{container}", redirectToSpecificContainer)
+	r.Post("/container/{container}/actions", controlContainer)
+	r.Post("/cluster/{cluster}/container/{container}/actions", controlContainer)
 
 	err := http.ListenAndServe(":8000", r)
 	if err != nil {

@@ -88,7 +88,7 @@ func CreateContainer(name string, fingerprint string) Operation {
 }
 
 // Copyright : NOAH MANDLER pour le nom de la fonction :3
-func Exist(name string) bool {
+func exist(name string) bool {
 	return getIdContainerWithName(name) != 0
 }
 
@@ -103,7 +103,7 @@ func getIdContainerWithName(name string) int {
 
 func DeleteContainerWithName(name string) (string, error) {
 	GetContainersFromApi()
-	if Exist(name) {
+	if exist(name) {
 		return api.Cli.Delete(fmt.Sprintf("/1.0/instances/%s", name)), nil
 	}
 	return "", errors.New("Container doesn't exist")
@@ -145,13 +145,25 @@ func StopContainer(name string) (string, error) {
 	return api.Cli.Put(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
 }
 
-/**
-func (c Containers) GetContainerByName(nameC string) *Container {
-	var jsonDecode Container
-	err := json.Unmarshal([]byte(api.Cli.Get(fmt.Sprintf("1.0/containers/%s", nameC))), &jsonDecode)
-	if err != nil {
-		log.Fatal(err)
+func RestartContainer(name string) (string, error) {
+	if !IsContainerExist(name) {
+		log.Fatal("Container doesn't exist")
 	}
-	return &jsonDecode
+	if GetContainerWithName(name).Metadata.Status == "Stopped" {
+		return "", errors.New("Container is already stopped")
+	}
+	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"restart\"}"), nil
 }
-**/
+
+func ControlContainerWithName(name string, action string) (string, error) {
+	switch action {
+	case "start":
+		return StartContainer(name)
+	case "stop":
+		return StopContainer(name)
+	case "restart":
+		return RestartContainer(name)
+	default:
+		return "", errors.New("action not found")
+	}
+}
