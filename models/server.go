@@ -120,6 +120,16 @@ func redirectToSpecificContainer(w http.ResponseWriter, r *http.Request) {
 	http.Redirect(w, r, "/container/"+container, 301)
 }
 
+// container/{container}/actions (start, stop, restart => bodyparams)
+func controlContainer(w http.ResponseWriter, r *http.Request) {
+	log.Print("Control a container...")
+	container := chi.URLParam(r, "container")
+	r.ParseForm()
+	action := r.FormValue("action")
+	_, _ = ControlContainerWithName(container, action)
+	w.Write([]byte("Container " + action + "ed"))
+}
+
 func StartWebServer() {
 	fs := http.FileServer(http.Dir("static/stylesheets"))
 	http.Handle("/static/stylesheets/", http.StripPrefix("/static/stylesheets/", fs))
@@ -153,7 +163,9 @@ func StartWebServer() {
 	r.Post("/cluster/{cluster}/container", createContainerFromCluster)
 	r.Delete("/cluster/{cluster}/container/{container}", deleteContainerFromCluster)
 	r.Get("/cluster/{cluster}/container", getContainerFromCluster)
-	r.Get("cluster/{cluster}/container/{container}", redirectToSpecificContainer)
+	r.Get("/cluster/{cluster}/container/{container}", redirectToSpecificContainer)
+	r.Post("/container/{container}/actions", controlContainer)
+	r.Post("/cluster/{cluster}/container/{container}/actions", controlContainer)
 
 	err := http.ListenAndServe(":8000", r)
 	if err != nil {

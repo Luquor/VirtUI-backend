@@ -136,3 +136,26 @@ func StopContainer(name string) (string, error) {
 	}
 	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
 }
+
+func RestartContainer(name string) (string, error) {
+	if !IsContainerExist(name) {
+		log.Fatal("Container doesn't exist")
+	}
+	if GetContainerWithName(name).Metadata.Status == "Stopped" {
+		return "", errors.New("Container is already stopped")
+	}
+	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"restart\"}"), nil
+}
+
+func ControlContainerWithName(name string, action string) (string, error) {
+	switch action {
+	case "start":
+		return StartContainer(name)
+	case "stop":
+		return StopContainer(name)
+	case "restart":
+		return RestartContainer(name)
+	default:
+		return "", errors.New("Action not found")
+	}
+}
