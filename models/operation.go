@@ -74,11 +74,17 @@ func GetLastOperation() Operation {
 	if len(operations.Metadata.Running) == 0 {
 		for _, metadatum := range operations.Metadata.Failure {
 			err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &operationDetail)
+			if err != nil {
+				log.Fatal(err)
+			}
 			return operationDetail
 		}
 	}
 	for _, metadatum := range operations.Metadata.Running {
 		err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &operationDetail)
+		if err != nil {
+			log.Fatal(err)
+		}
 		return operationDetail
 	}
 	if err != nil {
