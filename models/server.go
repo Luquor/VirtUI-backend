@@ -72,7 +72,7 @@ func deleteContainer(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(containerName))
 }
 
-func test(w http.ResponseWriter, r *http.Request) {
+func getImages(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, GetImages())
 }
 
@@ -96,7 +96,7 @@ func StartWebServer() {
 
 	// Image
 
-	r.Get("/images", test)
+	r.Get("/images", getImages)
 
 	// Container
 
