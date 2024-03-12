@@ -156,6 +156,6 @@ func ControlContainerWithName(name string, action string) (string, error) {
 	case "restart":
 		return RestartContainer(name)
 	default:
-		return "", errors.New("Action not found")
+		return "", errors.New("action not found")
 	}
 }

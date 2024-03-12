@@ -96,7 +96,7 @@ func GetContainersFromCluster(clusterName string) ([]Container, error) {
 			return append(containersList, container), nil
 		}
 	}
-	return nil, errors.New("No containers found in cluster")
+	return nil, errors.New("no containers found in cluster")
 }
 
 func GetClustersFromApi() []Cluster {
