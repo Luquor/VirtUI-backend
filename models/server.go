@@ -61,8 +61,7 @@ func stopContainer(w http.ResponseWriter, r *http.Request) {
 func getContainer(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting a container...")
 	name := chi.URLParam(r, "name")
-	container, _ := json.Marshal(GetContainerWithName(name))
-	w.Write(container)
+	render.JSON(w, r, GetContainerWithName(name))
 }
 
 func deleteContainer(w http.ResponseWriter, r *http.Request) {
