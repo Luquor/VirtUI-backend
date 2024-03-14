@@ -6,6 +6,6 @@
   - [] Ajouter un container à des clusters
   - [x] Démarrer / Arrêter un container
   - [] Accès aux consoles des containers
-- Snapshot
+- Snapshot 
   - [] Faire des snapshots des containers
   - [] Faire des récupération données des snapshots
