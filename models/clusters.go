@@ -63,12 +63,12 @@ func DeleteCluster(serverName string) (string, error) {
 	return "", errors.New("Cluster does not exist")
 }
 
-func CreateContainerFromCluster(location, containerName string) Operation {
+func CreateContainerFromCluster(location, containerName string, fingerprint string) Operation {
 	var operation Operation
 	if !clustersExist(location) {
 		log.Fatal("Cluster does not exist")
 	}
-	container := CreateContainer(containerName)
+	container := CreateContainer(containerName, fingerprint)
 	container.Metadata.Location = location
 	err := json.Unmarshal([]byte(api.Cli.Post("/1.0/instances", container)), &container)
 	if err != nil {
