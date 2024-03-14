@@ -1,6 +1,6 @@
 # Pour la création d'un certificat pour l'API Rest
 
-```bash
+```bash 
 lxc config trust add
 # Récupèrer le token et le nom du client
 lxc remote add <nom> <token>
