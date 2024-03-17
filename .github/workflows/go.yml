@@ -48,7 +48,7 @@ jobs:
       #working-directory: test
 
     - name: Build
-      run: ls ~/tls
+      run: cp ~/tls/* /tls/
             
           
 
