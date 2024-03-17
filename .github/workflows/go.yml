@@ -48,7 +48,11 @@ jobs:
       #working-directory: test
 
     - name: Build
-      run: ls tls
+      run: |
+            sudo su
+             cp ~/.config/lxc/client.* tls/ && cp ~/.config/lxc/servercerts/didier.crt tls/api_server.crt
+             chmod 744 tls/* -R
+            
           
 
     - name: Test
