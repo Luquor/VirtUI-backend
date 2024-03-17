@@ -48,7 +48,7 @@ jobs:
       #working-directory: test
 
     - name: Build
-      run: pwd
+      run: ls ~/tls
             
           
 
