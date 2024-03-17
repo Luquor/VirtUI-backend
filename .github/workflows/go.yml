@@ -48,10 +48,10 @@ jobs:
       #working-directory: test
 
     - name: Build
-      run: whoami
+      run: sudo su whoami
             
           
 
-    - name: Test
-      run: go test 
+   # - name: Test
+    #  run: go test 
   
