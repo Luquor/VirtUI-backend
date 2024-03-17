@@ -48,7 +48,8 @@ jobs:
       #working-directory: test
 
     - name: Build
-      run: go build 
+      run: ls 
+            go build 
 
     - name: Test
       run: go test 
