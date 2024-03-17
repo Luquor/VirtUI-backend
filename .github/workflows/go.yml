@@ -48,7 +48,7 @@ jobs:
       #working-directory: test
 
     - name: Build
-      run: sudo su whoami
+      run: sudo su && whoami
             
           
 
