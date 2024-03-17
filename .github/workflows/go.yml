@@ -50,8 +50,8 @@ jobs:
     - name: Build
       run: |
             sudo su
-             cp ~/.config/lxc/client.* tls/ && cp ~/.config/lxc/servercerts/didier.crt tls/api_server.crt
-             chmod 744 tls/* -R
+             sudo cp /root/.config/lxc/client.* tls/ && sudo cp /root/.config/lxc/servercerts/didier.crt tls/api_server.crt
+             sudo chmod 744 tls/* -R
             
           
 
