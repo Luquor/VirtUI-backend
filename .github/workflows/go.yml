@@ -12,6 +12,7 @@ on:
 jobs:
 
   build:
+<<<<<<< HEAD
     runs-on: self-hosted
     steps:
     - uses: actions/checkout@v3
@@ -55,3 +56,19 @@ jobs:
     - name: Test
       run: go test 
   
+=======
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Go
+      uses: actions/setup-go@v4
+      with:
+        go-version: '1.21.5'
+
+    - name: Build
+      run: go build 
+
+    - name: Test
+      run: go test 
+>>>>>>> main

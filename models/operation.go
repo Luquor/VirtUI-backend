@@ -58,7 +58,7 @@ func OperationExist() bool {
 	return len(operations.Metadata.Running) > 0
 }
 
-func getOperationWithID(id string) Operation {
+func GetOperationWithID(id string) Operation {
 	var operationDetail Operation
 	err := json.Unmarshal([]byte(api.Cli.Get(fmt.Sprintf("/1.0/operations/%s", id))), &operationDetail)
 	if err != nil {
@@ -74,11 +74,17 @@ func GetLastOperation() Operation {
 	if len(operations.Metadata.Running) == 0 {
 		for _, metadatum := range operations.Metadata.Failure {
 			err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &operationDetail)
+			if err != nil {
+				log.Fatal(err)
+			}
 			return operationDetail
 		}
 	}
 	for _, metadatum := range operations.Metadata.Running {
 		err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &operationDetail)
+		if err != nil {
+			log.Fatal(err)
+		}
 		return operationDetail
 	}
 	if err != nil {

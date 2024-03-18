@@ -33,6 +33,14 @@ type askCreateContainer struct {
 	} `json:"source"`
 }
 
+// Action possible : start, stop, restart, freeze, unfreeze
+type askState struct {
+	Action   string `json:"action"`
+	Force    bool   `json:"force"`
+	Stateful bool   `json:"stateful"`
+	Timeout  int    `json:"timeout"`
+}
+
 type containers struct {
 	api.StandardReturn
 	Operation string   `json:"operation"`
@@ -63,15 +71,19 @@ func GetContainerWithName(name string) Container {
 	return containersList[getIdContainerWithName(name)]
 }
 
-func CreateContainer(name string) Operation {
+func CreateContainer(name string, fingerprint string) Operation {
 	var data askCreateContainer
 	var operation Operation
+<<<<<<< HEAD
 	fingerprint := "175d0420d429"
+=======
+>>>>>>> main
 	dataJson := fmt.Sprintf("{\"name\":\"%s\",\"source\":{\"type\":\"image\",\"fingerprint\":\"%s\"}}", name, fingerprint)
 	err := json.Unmarshal([]byte(dataJson), &data)
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println(dataJson)
 	err = json.Unmarshal([]byte(api.Cli.Post("/1.0/instances", data)), &operation)
 	if err != nil {
 		return Operation{}
@@ -80,7 +92,7 @@ func CreateContainer(name string) Operation {
 }
 
 // Copyright : NOAH MANDLER pour le nom de la fonction :3
-func Exist(name string) bool {
+func exist(name string) bool {
 	return getIdContainerWithName(name) != 0
 }
 
@@ -95,7 +107,7 @@ func getIdContainerWithName(name string) int {
 
 func DeleteContainerWithName(name string) (string, error) {
 	GetContainersFromApi()
-	if Exist(name) {
+	if exist(name) {
 		return api.Cli.Delete(fmt.Sprintf("/1.0/instances/%s", name)), nil
 	}
 	return "", errors.New("Container doesn't exist")
@@ -124,7 +136,7 @@ func StartContainer(name string) (string, error) {
 	if GetContainerWithName(name).Metadata.Status == "Running" {
 		return "", errors.New("Container is already running")
 	}
-	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"start\"}"), nil
+	return api.Cli.Put(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"start\"}"), nil
 }
 
 func StopContainer(name string) (string, error) {
@@ -134,16 +146,28 @@ func StopContainer(name string) (string, error) {
 	if GetContainerWithName(name).Metadata.Status == "Stopped" {
 		return "", errors.New("Container is already stopped")
 	}
-	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
+	return api.Cli.Put(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
 }
 
-/**
-func (c Containers) GetContainerByName(nameC string) *Container {
-	var jsonDecode Container
-	err := json.Unmarshal([]byte(api.Cli.Get(fmt.Sprintf("1.0/containers/%s", nameC))), &jsonDecode)
-	if err != nil {
-		log.Fatal(err)
+func RestartContainer(name string) (string, error) {
+	if !IsContainerExist(name) {
+		log.Fatal("Container doesn't exist")
 	}
-	return &jsonDecode
+	if GetContainerWithName(name).Metadata.Status == "Stopped" {
+		return "", errors.New("Container is already stopped")
+	}
+	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"restart\"}"), nil
 }
-**/
+
+func ControlContainerWithName(name string, action string) (string, error) {
+	switch action {
+	case "start":
+		return StartContainer(name)
+	case "stop":
+		return StopContainer(name)
+	case "restart":
+		return RestartContainer(name)
+	default:
+		return "", errors.New("action not found")
+	}
+}
