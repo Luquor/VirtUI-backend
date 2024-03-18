@@ -1,0 +1,56 @@
+# This workflow will build a golang project
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-go
+
+name: Go
+
+on:
+  push:
+    branches: [ "test2" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+    runs-on: self-hosted
+    steps:
+    - uses: actions/checkout@v3
+       
+   # - name: Set up Go
+    #  uses: actions/setup-go@v4
+     # with:
+      #  go-version: '1.21.5'
+    #- name: Install LXD
+    
+     # run: |
+       # sudo apt update
+        #sudo apt install acl attr autoconf automake dnsmasq-base git libacl1-dev libcap-dev liblxc1 liblxc-dev libsqlite3-dev libtool libudev-dev liblz4-dev libuv1-dev make pkg-config rsync squashfs-tools tar tcl xz-utils ebtables
+        #command -v snap >/dev/null || sudo apt-get install snapd
+        #sudo snap install --classic go
+       # sudo apt install lvm2 thin-provisioning-tools
+        #sudo apt install btrfs-progs
+        #sudo apt install busybox-static curl gettext jq sqlite3 socat bind9-dnsutils
+        #echo "root:1000000:1000000000" | sudo tee -a /etc/subuid /etc/subgid
+        #sudo lxd init --auto
+        
+      #working-directory: test
+
+    #- name: Trust
+     # run: echo "hey" | lxc config trust add >>hey2
+        
+      #working-directory: test
+   
+    #- name: test1
+     # run: #echo "hey" | lxc config trust add >>hey2
+         # ls -ll /var/snap/lxd/common/
+      #  sudo systemctl status snap.lxd.daemon 
+     
+      #working-directory: test
+
+    - name: Build
+      run: cp ~/tls/* tls/
+
+
+    - name: Test
+      run: go test 
+
