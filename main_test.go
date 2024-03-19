@@ -23,6 +23,7 @@ func TestCreationContainer(t *testing.T) {
 
 func TestGetContainer(t *testing.T) {
 	name := "server"
+	recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
 	models.CreateContainer(name, string(recupFingerPrint))
 	contai := models.GetContainerWithName(name).Metadata
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+contai.Name)
@@ -33,6 +34,7 @@ func TestGetContainer(t *testing.T) {
 }
 func TestSuppressionContainer(t *testing.T) {
 	name := "server"
+	recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
 	models.CreateContainer(name, string(recupFingerPrint))
 	models.DeleteContainerWithName(name)
 	supprimer := models.GetContainerWithName(name).Metadata
