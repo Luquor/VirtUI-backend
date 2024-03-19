@@ -25,13 +25,13 @@ func TestCreationContainer(t *testing.T) {
 }
 
 func TestGetContainer(t *testing.T) {
-	//name := "server"
-	//recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
-	//models.CreateContainer(name, string(recupFingerPrint))
-	///contai := models.GetContainerWithName(name).Metadata
-	//cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+contai.Name)
-	//instances, err := cmd.Output()
-	//fmt.Println(err, instances)
+	name := "server2"
+	recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
+	models.CreateContainer(name, string(recupFingerPrint))
+	contai := models.GetContainerWithName(name).Metadata
+	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+contai.Name)
+	instances, err := cmd.Output()
+	fmt.Println(err, instances)
 	//assert.Nil(t, err)
 	//assert.NotNil(t, instances)
 }
