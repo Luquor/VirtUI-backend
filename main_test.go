@@ -14,7 +14,7 @@ func TestCreationContainer(t *testing.T) {
 	recupFingerPrint, err := cmd1.Output()
 	fmt.Println(recupFingerPrint)
 	name := "server"
-	//models.CreateContainer(name, string(recupFingerPrint))
+	models.CreateContainer(name, string(recupFingerPrint))
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
 	instances, err := cmd.Output()
 	fmt.Println(err, instances)
