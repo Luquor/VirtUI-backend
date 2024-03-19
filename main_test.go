@@ -40,8 +40,8 @@ func TestSuppressionContainer(t *testing.T) {
 	recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
 	models.CreateContainer(name, string(recupFingerPrint))
 	models.DeleteContainerWithName(name)
-	supprimer := models.GetContainerWithName(name).Metadata
-	fmt.Println("apres suppressions du conteneur:" + supprimer.Name)
+	//supprimer := models.GetContainerWithName(name).Metadata
+	fmt.Println("apres suppressions du conteneur:" + name)
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
 	instances, err := cmd.Output()
 	fmt.Println(err, instances)
