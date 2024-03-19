@@ -36,15 +36,15 @@ func TestGetContainer(t *testing.T) {
 	//assert.NotNil(t, instances)
 }
 func TestSuppressionContainer(t *testing.T) {
-	name := "server"
-	recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
-	models.CreateContainer(name, string(recupFingerPrint))
-	models.DeleteContainerWithName(name)
+	//name := "server"
+	//recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
+	//models.CreateContainer(name, string(recupFingerPrint))
+	//models.DeleteContainerWithName(name)
 	//supprimer := models.GetContainerWithName(name).Metadata
-	fmt.Println("apres suppressions du conteneur:" + name)
-	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
-	instances, err := cmd.Output()
-	fmt.Println(err, instances)
+	//fmt.Println("apres suppressions du conteneur:" + name)
+	//cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
+	//instances, err := cmd.Output()
+	//fmt.Println(err, instances)
 	//if assert.NotNil(t, err) {
 		//var tab_byte []byte
 		//assert.Equal(t, string(tab_byte), string(instances))
