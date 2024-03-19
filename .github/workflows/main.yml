@@ -46,7 +46,8 @@ jobs:
       #  sudo systemctl status snap.lxd.daemon 
      
       #working-directory: test
-
+    - name: go
+      run: export PATH=$PATH:/usr/local/go/bin
     - name: Build
       run: cp ~/tls/* tls/ && go build
 
