@@ -17,6 +17,7 @@ func TestCreationContainer(t *testing.T) {
 	models.CreateContainer(name, string(recupFingerPrint))
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
 	instances, err := cmd.Output()
+	fmt.Println("cmd",cmd,"fin")
 	fmt.Println("instances,err",err, instances,"fin")
 	//assert.Nil(t, err)
 	//assert.NotNil(t, instances)
