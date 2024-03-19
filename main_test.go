@@ -10,7 +10,8 @@ import (
 // TestCreationContainer
 // for a valid return value.
 func TestCreationContainer(t *testing.T) {
-	recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
+	cmd1 := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`)
+	recupFingerPrint, err := cmd1.Output()
 	fmt.Println(recupFingerPrint)
 	name := "server"
 	models.CreateContainer(name, string(recupFingerPrint))
