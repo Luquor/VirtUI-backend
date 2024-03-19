@@ -49,6 +49,11 @@ type lastOperations struct {
 	} `json:"metadata"`
 }
 
+type WebSocketConsole struct {
+	Data    string
+	Control string
+}
+
 func OperationExist() bool {
 	var operations lastOperations
 	err := json.Unmarshal([]byte(api.Cli.Get("/1.0/operations")), &operations)
@@ -65,6 +70,21 @@ func GetOperationWithID(id string) Operation {
 		log.Fatal(err)
 	}
 	return operationDetail
+}
+
+func GetOperationWithURL(url string) Operation {
+	var operationDetail Operation
+	err := json.Unmarshal([]byte(api.Cli.Get(url)), &operationDetail)
+	if err != nil {
+		log.Fatal(err)
+	}
+	return operationDetail
+}
+
+func GetSocketsFromURLOperation(url string) WebSocketConsole {
+	token := GetOperationWithURL(url).Metadata.Metadata.(map[string]interface{})["fds"].(map[string]interface{})
+	//return WebSocketConsole{}
+	return WebSocketConsole{Data: fmt.Sprintf("%s/websocket?secret=%s", url, token["0"]), Control: fmt.Sprintf("%s/websocket?secret=%s", url, token["control"])}
 }
 
 func GetLastOperation() Operation {

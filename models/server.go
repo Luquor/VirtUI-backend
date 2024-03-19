@@ -64,6 +64,14 @@ func getContainer(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, GetContainerWithName(name))
 }
 
+func consoleContainer(w http.ResponseWriter, r *http.Request) {
+	log.Print("Get WebSocket Console")
+	name := chi.URLParam(r, "name")
+	test := GetConsoleForContainer(name)
+	websocket := GetSocketsFromURLOperation(test.Operation)
+	render.JSON(w, r, websocket)
+}
+
 func deleteContainer(w http.ResponseWriter, r *http.Request) {
 	log.Print("Deleting a container...")
 	name := chi.URLParam(r, "name")
@@ -182,7 +190,8 @@ func StartWebServer() {
 	r.Get("/container/{name}", getContainer)
 	r.Put("/container/{name}/start", startContainer)
 	r.Put("/container/{name}/stop", stopContainer)
-	r.Delete("/container/{name}/", deleteContainer)
+	r.Delete("/container/{name}", deleteContainer)
+	r.Get("/container/{name}/console", consoleContainer)
 
 	r.Get("/clusters", getClusters)
 	r.Get("/cluster/{cluster}", getCluster)
