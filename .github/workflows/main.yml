@@ -53,5 +53,5 @@ jobs:
 
 
     - name: Test
-      run: go run . 
+      run: go test 
 
