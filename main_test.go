@@ -19,6 +19,8 @@ func TestCreationContainer(t *testing.T) {
 	fmt.Println(err, instances)
 	//assert.Nil(t, err)
 	//assert.NotNil(t, instances)
+	//sudo lxc image copy images:f01555e462c4 didier:
+	//afin de copier une image dans le cluster
 }
 
 func TestGetContainer(t *testing.T) {
