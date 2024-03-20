@@ -5,6 +5,7 @@ import (
 	"os/exec"
 	"testing"
 	"virtui/models"
+	"strings"
 )
 
 // TestCreationContainer
@@ -14,11 +15,11 @@ func TestCreationContainer(t *testing.T) {
 	recupFingerPrint, err := cmd1.Output()
 	fmt.Println("fingerprint", cmd1, "fin")
 	name := "server"
-	models.CreateContainer(name, string(recupFingerPrint))
+	models.CreateContainer(name, strings.TrimSuffix(string(recupFingerPrint),"\n"))
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
 	instances, err := cmd.Output()
 	fmt.Println("cmd", cmd, "fin")
-	fmt.Println("instances,err", err, instances, "fin")
+	fmt.Println("instances,err", err, string(instances), "fin")
 	//assert.Nil(t, err)
 	//assert.NotNil(t, instances)
 	//sudo lxc image copy images:f01555e462c4 didier:
