@@ -10,7 +10,7 @@ import (
 // TestCreationContainer
 // for a valid return value.
 func TestCreationContainer(t *testing.T) {
-	cmd1 := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`)
+	cmd1 :=  exec.Command("sh","-c",`lxc image list | grep -oP '^\| [^ALIAS|]*\s\| (\w*)' | sed 's/|.*| //'`)
 	recupFingerPrint, err := cmd1.Output()
 	fmt.Println("fingerprint", recupFingerPrint, "fin")
 	name := "server"
