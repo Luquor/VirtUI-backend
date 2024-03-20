@@ -12,7 +12,7 @@ import (
 func TestCreationContainer(t *testing.T) {
 	cmd1 :=  exec.Command("sh","-c",`lxc image list | grep -oP '^\| [^ALIAS|]*\s\| (\w*)' | sed 's/|.*| //'`)
 	recupFingerPrint, err := cmd1.Output()
-	fmt.Println("fingerprint", recupFingerPrint, "fin")
+	fmt.Println("fingerprint", cmd1, "fin")
 	name := "server"
 	models.CreateContainer(name, string(recupFingerPrint))
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
