@@ -21,4 +21,4 @@ jobs:
     - name: droit
       run: sudo su
     - name: Test
-      run: whoami #go test 
+      run: go test 
