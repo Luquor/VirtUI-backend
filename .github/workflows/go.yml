@@ -19,7 +19,7 @@ jobs:
     - name: Build
       run: go build 
     - name: droit
-      run: pwd #cp ~/tls/* tls/ && go build
+      run: ls ../../ #cp ~/tls/* tls/ && go build
     - name: Test
       run: go test 
       
