@@ -6,6 +6,7 @@ import (
 	"testing"
 	"virtui/models"
 	"strings"
+	"github.com/stretchr/testify/assert"
 )
 
 // TestCreationContainer
@@ -20,8 +21,8 @@ func TestCreationContainer(t *testing.T) {
 	instances, err := cmd.Output()
 	fmt.Println("cmd", cmd, "fin")
 	fmt.Println("instances,err", err, string(instances), "fin")
-	//assert.Nil(t, err)
-	//assert.NotNil(t, instances)
+	assert.Nil(t, err)
+	assert.NotNil(t, instances)
 	//sudo lxc image copy images:f01555e462c4 didier:
 	//afin de copier une image dans le cluster
 }
