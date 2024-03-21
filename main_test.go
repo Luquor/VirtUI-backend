@@ -41,8 +41,8 @@ func TestGetContainer(t *testing.T) {
 }
 func TestSuppressionContainer(t *testing.T) {
 	name := "server"
-	//recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
-	//models.CreateContainer(name, string(recupFingerPrint))
+	recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
+	models.CreateContainer(name, string(recupFingerPrint))
 	models.DeleteContainerWithName(name)
 	//supprimer := models.GetContainerWithName(name).Metadata
 	//fmt.Println("apres suppressions du conteneur:" + name)
