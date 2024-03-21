@@ -48,7 +48,7 @@ func TestSuppressionContainer(t *testing.T) {
 	//fmt.Println("apres suppressions du conteneur:" + name)
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
 	instances, err := cmd.Output()
-	fmt.Println(err, instances)
+	fmt.Println(err, string(instances))
 	//if assert.NotNil(t, err) {
 	//var tab_byte []byte
 	//assert.Equal(t, string(tab_byte), string(instances))
