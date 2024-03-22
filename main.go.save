@@ -1,0 +1,18 @@
+package main
+
+import (
+
+
+"os/exec"
+"fmt"
+)
+
+func main() {
+cmd := exec.Command("lxc","image","list",">>"SX,"hey")
+cmd2 := exec.Command( "grep","-oP", `^\| [^ALIAS|]*\s\| (\w*)`,"hey")
+re,err := cmd.Output()
+fmt.Println(re,err,cmd,cmd2)
+
+
+
+}

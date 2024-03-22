@@ -1,28 +1,39 @@
 package main
 
 import (
-	"fmt"
+//	"fmt"
 	"os/exec"
+	"strings"
 	"testing"
 	"virtui/models"
-	"strings"
+
+
+
+
 	"github.com/stretchr/testify/assert"
 )
 
 // TestCreationContainer
 // for a valid return value.
 func TestCreationContainer(t *testing.T) {
-	cmd1 :=  exec.Command("sh","-c",`lxc image list | grep -oP '^\| [^ALIAS|]*\s\| (\w*)' | sed 's/|.*| //'`)
+	cmd1 := exec.Command("sh", "-c", `lxc image list | grep -oP '^\| [^ALIAS|]*\s\| (\w*)' | sed 's/|.*| //'`)
 	recupFingerPrint, err := cmd1.Output()
-	fmt.Println("fingerprint", cmd1, "fin")
 	name := "server"
-	models.CreateContainer(name, strings.TrimSuffix(string(recupFingerPrint),"\n"))
+	models.CreateContainer(name, strings.TrimSuffix(string(recupFingerPrint), "\n"))
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
 	instances, err := cmd.Output()
-	fmt.Println("cmd", cmd, "fin")
-	fmt.Println("instances,err", err, string(instances), "fin")
+
+
+
 	assert.Nil(t, err)
 	assert.NotNil(t, instances)
+
+//	fmt.Println("cmd",err, "fin")
+	//fmt.Println("instances,err", err, string(instances), "fin")
+//	assert.Nil(t, err)
+//	assert.NotNil(t, instances)
+	exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
+
 	//sudo lxc image copy images:f01555e462c4 didier:
 	//afin de copier une image dans le cluster
 }
@@ -39,20 +50,17 @@ func TestGetContainer(t *testing.T) {
 	//assert.NotNil(t, instances)
 }
 func TestSuppressionContainer(t *testing.T) {
-	//name := "server"
-	//recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
-	//models.CreateContainer(name, string(recupFingerPrint))
-	//models.DeleteContainerWithName(name)
+	name := "server"
+	cmd1 := exec.Command("sh", "-c", `lxc image list | grep -oP '^\| [^ALIAS|]*\s\| (\w*)' | sed 's/|.*| //'`)
+	recupFingerPrint, err := cmd1.Output()
+	models.CreateContainer(name, strings.TrimSuffix(string(recupFingerPrint), "\n"))
+	models.DeleteContainerWithName(name)
 	//supprimer := models.GetContainerWithName(name).Metadata
 	//fmt.Println("apres suppressions du conteneur:" + name)
-	//cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
-	//instances, err := cmd.Output()
-	//fmt.Println(err, instances)
-	//if assert.NotNil(t, err) {
-	//var tab_byte []byte
-	//assert.Equal(t, string(tab_byte), string(instances))
-	//}
-
+	cmd := exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
+	instances, err := cmd.Output()
+	assert.NotNil(t,err)
+	assert.NotNil(t,instances)
 }
 
 func TestEtatContainer(t *testing.T) {
