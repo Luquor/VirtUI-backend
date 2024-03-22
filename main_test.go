@@ -1,7 +1,7 @@
 package main
 
 import (
-//	"fmt"
+	"fmt"
 	"os/exec"
 	"strings"
 	"testing"
@@ -21,17 +21,17 @@ func TestCreationContainer(t *testing.T) {
 	recupFingerPrint, err := cmd1.Output()
 	name := "server"
 	models.CreateContainer(name, strings.TrimSuffix(string(recupFingerPrint), "\n"))
-//	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
-//	instances, err := cmd.Output()
+	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
+	instances, err := cmd.Output()
 //
-	assert.Nil(t, err)
+//	assert.Nil(t, err)
 //	assert.NotNil(t, instances)
 
 //	fmt.Println("cmd",err, "fin")
 	//fmt.Println("instances,err", err, string(instances), "fin")
-//	assert.Nil(t, err)
-//	assert.NotNil(t, instances)
-//	exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
+	assert.Nil(t,err)
+	assert.NotNil(t, instances)
+	exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
 
 
 }
@@ -57,11 +57,11 @@ func TestSuppressionContainer(t *testing.T) {
 	models.DeleteContainerWithName(name)
 	//supprimer := models.GetContainerWithName(name).Metadata
 //	exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
-	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
+	time.Sleep(10 * time.Second)
+	cmd := exec.Command("sh","-c",`lxc list | grep server`)
 	instances, err := cmd.Output()
-//	fmt.Println(err)
-	assert.Nil(t,err)
-	assert.NotNil(t,string(instances))
+	fmt.Println(err)
+	assert.Equal(t,string(instances),"")
 
 }
 
