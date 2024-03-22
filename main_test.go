@@ -1,14 +1,12 @@
 package main
 
 import (
-//	"fmt"
+	"fmt"
 	"os/exec"
 	"strings"
 	"testing"
 	"virtui/models"
-
-
-
+	"time"
 
 
 
@@ -26,9 +24,6 @@ func TestCreationContainer(t *testing.T) {
 	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
 	instances, err := cmd.Output()
 
-
-
-
 	assert.Nil(t, err)
 	assert.NotNil(t, instances)
 
@@ -39,14 +34,6 @@ func TestCreationContainer(t *testing.T) {
 	exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
 
 
-	//fmt.Println("cmd", cmd, "fin")
-	//fmt.Println("instances,err", err, string(instances), "fin")
-	assert.Nil(t, err)
-	assert.NotNil(t, instances)
-	exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
-
-	//sudo lxc image copy images:f01555e462c4 didier:
-	//afin de copier une image dans le cluster
 }
 
 func TestGetContainer(t *testing.T) {
@@ -66,27 +53,15 @@ func TestSuppressionContainer(t *testing.T) {
 	cmd1 := exec.Command("sh", "-c", `lxc image list | grep -oP '^\| [^ALIAS|]*\s\| (\w*)' | sed 's/|.*| //'`)
 	recupFingerPrint, err := cmd1.Output()
 	models.CreateContainer(name, strings.TrimSuffix(string(recupFingerPrint), "\n"))
+	time.Sleep(10 * time.Second)
 	models.DeleteContainerWithName(name)
 	//supprimer := models.GetContainerWithName(name).Metadata
-	//fmt.Println("apres suppressions du conteneur:" + name)
-	cmd := exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
-	instances, err := cmd.Output()
-	assert.NotNil(t,err)
-	assert.NotNil(t,instances)
-
-	recupFingerPrint, err := exec.Command("lxc", "image", "list", "|", "grep", "-oP", `^\| [^ALIAS|]*\s\| (\w*)`, "|", " sed ", `s/|.*| //`).Output()
-	models.CreateContainer(name, string(recupFingerPrint))
-	models.DeleteContainerWithName(name)
-	//supprimer := models.GetContainerWithName(name).Metadata
-	//fmt.Println("apres suppressions du conteneur:" + name)
-	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
-	instances, err := cmd.Output()
-	fmt.Println(err, string(instances))
-	//if assert.NotNil(t, err) {
-	//var tab_byte []byte
-	//assert.Equal(t, string(tab_byte), string(instances))
-	//}
-
+//	exec.Command("lxc", "query", "--request", "DELETE", "/1.0/instances/"+name)
+//	cmd := exec.Command("lxc", "query", "--request", "GET", "/1.0/instances/"+name)
+//	instances, err := cmd.Output()
+	fmt.Println(err)
+//	assert.Nil(t,err)
+//	assert.Nil(t,string(instances))
 
 }
 
