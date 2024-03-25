@@ -103,7 +103,7 @@ func GetClustersFromApi() []Cluster {
 	var clustersDetail []Cluster
 	var clusterDetail Cluster
 	var clusters clusters
-	err := json.Unmarshal([]byte(api.Cli.Get("/1.0/cluster")), &clusters)
+	err := json.Unmarshal([]byte(api.Cli.Get("/1.0/cluster/members")), &clusters)
 	for _, metadatum := range clusters.Metadata {
 		err = json.Unmarshal([]byte(api.Cli.Get(metadatum)), &clusterDetail)
 		clustersDetail = append(clustersDetail, clusterDetail)
