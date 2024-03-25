@@ -1,17 +1,24 @@
 package models
 
 import (
+	"bufio"
+	"crypto/rand"
 	"encoding/json"
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"text/template"
+	"time"
 	"virtui/api/modelsResponse"
+
+	"strings"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
+	"github.com/patrickmn/go-cache"
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
@@ -160,6 +167,65 @@ func controlContainer(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Container " + action + "ed"))
 }
 
+/////////////////////////////////////////////////////////
+
+// /On charge les user et verifie les credentials////
+func chargementUser(user string, mdp string) bool {
+	//récupération des utilisateurs du fichier
+	file, err := os.Open("fichier.txt")
+	if err != nil {
+		fmt.Println("Erreur lors de l'ouverture du fichier:", err)
+	}
+	defer file.Close()
+
+	// Créer un scanner pour lire le fichier ligne par ligne
+	scanner := bufio.NewScanner(file)
+	// Parcourir chaque ligne du fichier
+	for scanner.Scan() {
+		line := scanner.Text()
+		credentials := strings.Split(line, ":") // Traiter la ligne (dans cet exemple, l'imprimer)
+		if credentials[0] == user {
+			return credentials[1] == mdp
+		}
+	}
+	return false
+}
+
+// /Quand c'est vrai on crée le token et le stock en cache dans le serveur///
+func generate_token_server(user string, mdp string, wr http.ResponseWriter, r *http.Request) {
+	if chargementUser(user, mdp) {
+		b := make([]byte, 10)
+		rand.Read(b)
+		server_cache := cache.New(5*time.Minute, 10*time.Minute)
+		server_cache.Set(user, b, cache.DefaultExpiration)
+		r.Header.Set("Authorization", "Bearer "+string(b))
+		http.Redirect(wr, r, "/", 301)
+	} else {
+		fmt.Println("Connexion echoue")
+	}
+
+}
+func renvoieToken(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
+
+		if r.Header.Get("Authorization") == "TOKEN" {
+			fmt.Println("J'ai un token moi")
+		} else {
+			http.Redirect(rw, r, "/login", 301)
+		}
+		next.ServeHTTP(rw, r)
+	})
+}
+func log2(wr http.ResponseWriter, r *http.Request) {
+	log.Print("Verification de votre identite")
+	r.ParseForm()
+	jsonResponse := User{}
+	json.NewDecoder(r.Body).Decode(&jsonResponse)
+	generate_token_server(jsonResponse.Username, jsonResponse.Password, wr, r)
+	render.JSON(wr, r, jsonResponse)
+}
+
+// ////////////////////////////////////////////////////
 func StartWebServer() {
 
 	log.Print("Starting web server...")
@@ -176,7 +242,13 @@ func StartWebServer() {
 	}))
 
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+
+	r.Use(renvoieToken)
+	//login
+
 	r.Use(middleware.Logger)
+	r.Get("/login", log2)
+	//auth_middleware := gin.New()
 
 	// Image
 
