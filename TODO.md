@@ -7,5 +7,5 @@
   - [x] Démarrer / Arrêter un container
   - [] Accès aux consoles des containers
 - Snapshot
-  - [] Faire des snapshots des containers
-  - [] Faire des récupération données des snapshots
+  - [x] Faire des snapshots des containers
+  - [] Restaurer un snapshot
