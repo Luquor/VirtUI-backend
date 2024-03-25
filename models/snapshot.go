@@ -62,3 +62,13 @@ func CreateSnapshot(containerName string, snapshotName string) Operation {
 
 	return operation
 }
+
+// curl -X POST -H "Content-Type: application/octet-stream" -T <file_path> --unix-socket /var/snap/lxd/common/lxd/unix.socket lxd/1.0/instances
+// post /1.0/instances
+// post a snapshot json file
+func RestoreSnapshot(containerName, snapshotName string) {
+	if !IsContainerExist(containerName) {
+		errors.New("container does not exist")
+	}
+
+}
