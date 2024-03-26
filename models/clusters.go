@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"virtui/api"
 )
@@ -91,12 +92,14 @@ func DeleteContainerFromCluster(location, containerName string) Operation {
 
 func GetContainersFromCluster(clusterName string) ([]Container, error) {
 	containersList := GetContainersFromApi()
+	var containerListForCluster []Container
 	for _, container := range containersList {
+		fmt.Println(container.Metadata.Location, clusterName)
 		if container.Metadata.Location == clusterName {
-			return append(containersList, container), nil
+			containerListForCluster = append(containerListForCluster, container)
 		}
 	}
-	return nil, errors.New("no containers found in cluster")
+	return containerListForCluster, nil
 }
 
 func GetClustersFromApi() []Cluster {
