@@ -50,8 +50,9 @@ type lastOperations struct {
 }
 
 type WebSocketConsole struct {
-	Data    string
-	Control string
+	Data     string
+	Control  string
+	Location string
 }
 
 func OperationExist() bool {
@@ -82,8 +83,8 @@ func GetOperationWithURL(url string) Operation {
 }
 
 func GetSocketsFromURLOperation(url string) WebSocketConsole {
-	token := GetOperationWithURL(url).Metadata.Metadata.(map[string]interface{})["fds"].(map[string]interface{})
-	//return WebSocketConsole{}
+	operation := GetOperationWithURL(url)
+	token := operation.Metadata.Metadata.(map[string]interface{})["fds"].(map[string]interface{})
 	return WebSocketConsole{Data: fmt.Sprintf("%s/websocket?secret=%s", url, token["0"]), Control: fmt.Sprintf("%s/websocket?secret=%s", url, token["control"])}
 }
 

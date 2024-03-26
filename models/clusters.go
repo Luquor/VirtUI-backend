@@ -12,13 +12,19 @@ var clusterGroupsList []ClusterGroup
 
 type Cluster struct {
 	Metadata struct {
-		Enabled      bool `json:"enabled"`
-		MemberConfig []struct {
-			ClusterAddress string `json:"cluster_address"`
-			ClusterPort    int    `json:"cluster_port"`
-			ClusterName    string `json:"cluster_name"`
-		} `json:"member_config"`
-		ServerName string `json:"server_name"`
+		Architecture string `json:"architecture"`
+		Config       struct {
+			SchedulerInstance string `json:"scheduler.instance"`
+		} `json:"config"`
+		Database      bool     `json:"database"`
+		Description   string   `json:"description"`
+		FailureDomain string   `json:"failure_domain"`
+		Groups        []string `json:"groups"`
+		Message       string   `json:"message"`
+		Roles         []string `json:"roles"`
+		ServerName    string   `json:"server_name"`
+		Status        string   `json:"status"`
+		Url           string   `json:"url"`
 	} `json:"metadata"`
 	api.StandardReturn
 }
