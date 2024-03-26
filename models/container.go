@@ -34,12 +34,12 @@ type askCreateContainer struct {
 }
 
 // Action possible : start, stop, restart, freeze, unfreeze
-type askState struct {
-	Action   string `json:"action"`
-	Force    bool   `json:"force"`
-	Stateful bool   `json:"stateful"`
-	Timeout  int    `json:"timeout"`
-}
+// type askState struct {
+// 	Action   string `json:"action"`
+// 	Force    bool   `json:"force"`
+// 	Stateful bool   `json:"stateful"`
+// 	Timeout  int    `json:"timeout"`
+// }
 
 type containers struct {
 	api.StandardReturn

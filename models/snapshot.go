@@ -26,13 +26,13 @@ type Snapshot struct {
 	api.StandardReturn
 }
 
-type snapshots struct {
-	api.StandardReturn
-	Operation string   `json:"operation"`
-	ErrorCode int      `json:"error_code"`
-	Error     string   `json:"error"`
-	Metadata  []string `json:"metadata"`
-}
+// type snapshots struct {
+// 	api.StandardReturn
+// 	Operation string   `json:"operation"`
+// 	ErrorCode int      `json:"error_code"`
+// 	Error     string   `json:"error"`
+// 	Metadata  []string `json:"metadata"`
+// }
 
 type askCreateSnapshot struct {
 	Expires_at time.Time `json:"expires_at"`
@@ -44,7 +44,7 @@ func CreateSnapshot(containerName string, snapshotName string) Operation {
 	var data askCreateSnapshot
 	var operation Operation
 	if !IsContainerExist(containerName) {
-		errors.New("container does not exist")
+		fmt.Println(errors.New("container does not exist"))
 	}
 
 	expirationDate := time.Now().AddDate(0, 0, 7)
@@ -57,7 +57,7 @@ func CreateSnapshot(containerName string, snapshotName string) Operation {
 
 	err = json.Unmarshal([]byte(api.Cli.Post(fmt.Sprintf("/1.0/instances/%s/snapshots", containerName), data)), &operation)
 	if err != nil {
-
+		log.Fatal(err)
 	}
 
 	return operation
@@ -67,10 +67,10 @@ func RestoreSnapshot(containerName string, snapshot Snapshot) Operation {
 	var operation Operation
 
 	if !IsContainerExist(containerName) {
-		errors.New("container does not exist")
+		fmt.Println(errors.New("container does not exist"))
 	}
 	if !IsSnapshotExist(snapshot.Metadata.Name) {
-		errors.New("snapshot does not exist")
+		fmt.Println(errors.New("snapshot does not exist"))
 	}
 
 	if snapshot.Metadata.Stateful {

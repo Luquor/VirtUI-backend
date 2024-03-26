@@ -3,15 +3,20 @@ package models
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/go-chi/chi/middleware"
 	"log"
 	"net/http"
 	"text/template"
 	"virtui/api/modelsResponse"
 
+	"github.com/go-chi/chi/middleware"
+
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
+)
+
+const (
+	STATUS_MOVED = http.StatusMovedPermanently
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
@@ -147,7 +152,7 @@ func getContainerFromCluster(w http.ResponseWriter, r *http.Request) {
 func redirectToSpecificContainer(w http.ResponseWriter, r *http.Request) {
 	log.Print("Redirecting to the container...")
 	container := chi.URLParam(r, "container")
-	http.Redirect(w, r, "/container/"+container, 301)
+	http.Redirect(w, r, "/container/"+container, STATUS_MOVED)
 }
 
 // container/{container}/actions (start, stop, restart => bodyparams)
