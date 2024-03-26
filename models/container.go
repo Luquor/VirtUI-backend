@@ -71,7 +71,10 @@ func GetContainerWithName(name string) Container {
 	return containersList[getIdContainerWithName(name)]
 }
 
-func CreateContainer(name string, fingerprint string) Operation {
+func CreateContainer(name string, fingerprint string, cluster string) Operation {
+	if cluster == "" {
+		cluster = "(default)"
+	}
 	var data askCreateContainer
 	var operation Operation
 	dataJson := fmt.Sprintf("{\"name\":\"%s\",\"source\":{\"type\":\"image\",\"fingerprint\":\"%s\"}}", name, fingerprint)
@@ -79,7 +82,7 @@ func CreateContainer(name string, fingerprint string) Operation {
 	if err != nil {
 		log.Fatal(err)
 	}
-	err = json.Unmarshal([]byte(api.Cli.Post("/1.0/instances", data)), &operation)
+	err = json.Unmarshal([]byte(api.Cli.Post(fmt.Sprintf("/1.0/instances?target=%s", cluster), data)), &operation)
 	if err != nil {
 		return Operation{}
 	}

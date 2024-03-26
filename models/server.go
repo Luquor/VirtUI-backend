@@ -36,7 +36,7 @@ func createContainer(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	jsonResponse := modelsResponse.AddContainerResponse{}
 	json.NewDecoder(r.Body).Decode(&jsonResponse)
-	operation := CreateContainer(jsonResponse.Name, jsonResponse.Fingerprint)
+	operation := CreateContainer(jsonResponse.Name, jsonResponse.Fingerprint, "")
 	fmt.Println("Création d'un container (Status) : ", operation.Status, " ...")
 	fmt.Println("Operation (status) :", GetOperationWithID(operation.Metadata.Id).Status)
 	//fmt.Println("Create container", CreateContainer("Nouveau"+strconv.FormatInt(time.Now().Unix(), 10)))
@@ -116,8 +116,8 @@ func createContainerFromCluster(w http.ResponseWriter, r *http.Request) {
 	jsonResponse := modelsResponse.AddContainerResponse{}
 	json.NewDecoder(r.Body).Decode(&jsonResponse)
 	cluster := chi.URLParam(r, "cluster")
-	_ = CreateContainerFromCluster(cluster, jsonResponse.Name, jsonResponse.Fingerprint)
-	w.Write([]byte("Create container from cluster"))
+	operation := CreateContainerFromCluster(cluster, jsonResponse.Name, jsonResponse.Fingerprint)
+	render.JSON(w, r, operation)
 }
 
 func deleteContainerFromCluster(w http.ResponseWriter, r *http.Request) {
