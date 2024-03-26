@@ -150,7 +150,8 @@ func controlContainer(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&jsonResponse)
 	response, err := ControlContainerWithName(container, jsonResponse.Action)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	w.Write([]byte(response))
 }
