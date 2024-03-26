@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"log"
 	"time"
 	"virtui/api"
 )
@@ -47,7 +46,7 @@ type Image struct {
 	api.StandardReturn
 }
 
-func GetImages() []Image {
+func GetImages() ([]Image, error) {
 	var images Images
 	var imagesDetail []Image
 	var imageDetail Image
@@ -57,7 +56,7 @@ func GetImages() []Image {
 		imagesDetail = append(imagesDetail, imageDetail)
 	}
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
-	return imagesDetail
+	return imagesDetail, nil
 }

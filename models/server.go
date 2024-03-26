@@ -52,7 +52,14 @@ func getContainers(w http.ResponseWriter, r *http.Request) {
 func getContainer(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting a container...")
 	name := chi.URLParam(r, "name")
-	render.JSON(w, r, GetContainerWithName(name))
+
+	container, err := GetContainerWithName(name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	render.JSON(w, r, container)
 }
 
 func consoleContainer(w http.ResponseWriter, r *http.Request) {
@@ -71,7 +78,14 @@ func deleteContainer(w http.ResponseWriter, r *http.Request) {
 }
 
 func getImages(w http.ResponseWriter, r *http.Request) {
-	render.JSON(w, r, GetImages())
+
+	imagesList, err := GetImages()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	render.JSON(w, r, imagesList)
 }
 
 func getClusters(w http.ResponseWriter, r *http.Request) {
@@ -150,7 +164,8 @@ func controlContainer(w http.ResponseWriter, r *http.Request) {
 	json.NewDecoder(r.Body).Decode(&jsonResponse)
 	response, err := ControlContainerWithName(container, jsonResponse.Action)
 	if err != nil {
-		log.Fatal(err)
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 	w.Write([]byte(response))
 }
