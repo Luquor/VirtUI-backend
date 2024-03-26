@@ -96,13 +96,22 @@ func getImages(w http.ResponseWriter, r *http.Request) {
 func getClusters(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting all the clusters...")
 	// w.Write(array)
-	render.JSON(w, r, GetClustersFromApi())
+	array, err := GetClustersFromApi()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	render.JSON(w, r, array)
 }
 
 func getCluster(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting a cluster...")
 	name := chi.URLParam(r, "serverName")
-	dataJson, _ := GetClusterWithName(name)
+	dataJson, err := GetClusterWithName(name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
 	render.JSON(w, r, dataJson)
 }
 
