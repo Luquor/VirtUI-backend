@@ -46,7 +46,13 @@ func createContainer(w http.ResponseWriter, r *http.Request) {
 func getContainers(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting all the containers...")
 	// w.Write(array)
-	render.JSON(w, r, GetContainersFromApi())
+	array, err := GetContainersFromApi()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	render.JSON(w, r, array)
 }
 
 func getContainer(w http.ResponseWriter, r *http.Request) {
