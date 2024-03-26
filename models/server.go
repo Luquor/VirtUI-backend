@@ -12,17 +12,18 @@ import (
 	"time"
 	"virtui/api/modelsResponse"
 
+	"github.com/go-chi/chi/middleware"
+
 	"strings"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
 	"github.com/patrickmn/go-cache"
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
-	array := GetContainersFromApi()
+	var array []Container
 	tmpl, err := template.ParseFiles("index.html")
 	if err != nil {
 		log.Fatal(err)
@@ -231,6 +232,8 @@ func StartWebServer() {
 	log.Print("Starting web server...")
 
 	r := chi.NewRouter()
+
+	r.Use(middleware.Logger)
 
 	r.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
