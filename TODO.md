@@ -8,4 +8,4 @@
   - [] Accès aux consoles des containers
 - Snapshot
   - [x] Faire des snapshots des containers
-  - [] Restaurer un snapshot
+  - [x] Restaurer un snapshot

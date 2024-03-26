@@ -63,12 +63,44 @@ func CreateSnapshot(containerName string, snapshotName string) Operation {
 	return operation
 }
 
-// curl -X POST -H "Content-Type: application/octet-stream" -T <file_path> --unix-socket /var/snap/lxd/common/lxd/unix.socket lxd/1.0/instances
-// post /1.0/instances
-// post a snapshot json file
-func RestoreSnapshot(containerName, snapshotName string) {
+func RestoreSnapshot(containerName string, snapshot Snapshot) Operation {
+	var operation Operation
+
 	if !IsContainerExist(containerName) {
 		errors.New("container does not exist")
 	}
+	if !IsSnapshotExist(snapshot.Metadata.Name) {
+		errors.New("snapshot does not exist")
+	}
 
+	if snapshot.Metadata.Stateful {
+		err := json.Unmarshal([]byte(api.Cli.Put(fmt.Sprintf("/1.0/instances/%s", containerName), fmt.Sprintf(`{"restore": "%s/%s", "stateful": true}`, containerName, snapshot.Metadata.Name))), &operation)
+		if err != nil {
+			log.Fatal(err)
+		}
+	} else {
+		err := json.Unmarshal([]byte(api.Cli.Put(fmt.Sprintf("/1.0/instances/%s", containerName), fmt.Sprintf(`{"restore": "%s/%s"}`, containerName, snapshot.Metadata.Name))), &operation)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	return operation
+}
+
+func IsSnapshotExist(name string) bool {
+	GetSnapshotsFromApi()
+	for _, snapshot := range snapshotList {
+		if snapshot.Metadata.Name == name {
+			return true
+		}
+	}
+	return false
+}
+
+func GetSnapshotsFromApi() {
+	err := json.Unmarshal([]byte(api.Cli.Get("/1.0/instances")), &snapshotList)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
