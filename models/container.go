@@ -130,7 +130,7 @@ func StartContainer(name string) (string, error) {
 	if GetContainerWithName(name).Metadata.Status == "Running" {
 		return "", errors.New("Container is already running")
 	}
-	return api.Cli.Put(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"start\"}"), nil
+	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"start\"}"), nil
 }
 
 func StopContainer(name string) (string, error) {
@@ -140,7 +140,7 @@ func StopContainer(name string) (string, error) {
 	if GetContainerWithName(name).Metadata.Status == "Stopped" {
 		return "", errors.New("Container is already stopped")
 	}
-	return api.Cli.Put(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"stop\"}"), nil
+	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"stop\"}"), nil
 }
 
 func RestartContainer(name string) (string, error) {
@@ -150,7 +150,7 @@ func RestartContainer(name string) (string, error) {
 	if GetContainerWithName(name).Metadata.Status == "Stopped" {
 		return "", errors.New("Container is already stopped")
 	}
-	return api.Cli.Post(fmt.Sprintf("/1.0/containers/%s/state", name), "{\"action\":\"restart\"}"), nil
+	return api.Cli.Post(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"restart\"}"), nil
 }
 
 func ControlContainerWithName(name string, action string) (string, error) {

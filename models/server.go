@@ -148,8 +148,11 @@ func controlContainer(w http.ResponseWriter, r *http.Request) {
 	r.ParseForm()
 	jsonResponse := modelsResponse.ControlContainer{}
 	json.NewDecoder(r.Body).Decode(&jsonResponse)
-	_, _ = ControlContainerWithName(container, jsonResponse.Action)
-	w.Write([]byte("Container " + jsonResponse.Action + "ed"))
+	response, err := ControlContainerWithName(container, jsonResponse.Action)
+	if err != nil {
+		log.Fatal(err)
+	}
+	w.Write([]byte(response))
 }
 
 func StartWebServer() {
