@@ -71,7 +71,14 @@ func deleteContainer(w http.ResponseWriter, r *http.Request) {
 }
 
 func getImages(w http.ResponseWriter, r *http.Request) {
-	render.JSON(w, r, GetImages())
+
+	imagesList, err := GetImages()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	render.JSON(w, r, imagesList)
 }
 
 func getClusters(w http.ResponseWriter, r *http.Request) {
