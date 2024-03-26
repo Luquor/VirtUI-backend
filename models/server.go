@@ -3,19 +3,19 @@ package models
 import (
 	"encoding/json"
 	"fmt"
+	"github.com/go-chi/chi/middleware"
 	"log"
 	"net/http"
 	"text/template"
 	"virtui/api/modelsResponse"
 
 	"github.com/go-chi/chi"
-	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"github.com/go-chi/render"
 )
 
 func homepage(w http.ResponseWriter, r *http.Request) {
-	array := GetContainersFromApi()
+	var array []Container
 	tmpl, err := template.ParseFiles("index.html")
 	if err != nil {
 		log.Fatal(err)
@@ -166,6 +166,8 @@ func StartWebServer() {
 
 	r := chi.NewRouter()
 
+	r.Use(middleware.Logger)
+
 	r.Use(cors.Handler(cors.Options{
 		// AllowedOrigins:   []string{"https://foo.com"}, // Use this to allow specific origin hosts
 		AllowedOrigins: []string{"https://*", "http://*"},
@@ -176,7 +178,6 @@ func StartWebServer() {
 	}))
 
 	r.Use(render.SetContentType(render.ContentTypeJSON))
-	r.Use(middleware.Logger)
 
 	// Image
 

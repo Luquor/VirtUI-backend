@@ -12,6 +12,8 @@ import (
 	"os"
 )
 
+var URL_API_LXD = "127.0.0.1:8443"
+
 type Client struct {
 	Client *http.Client
 }
@@ -21,8 +23,14 @@ var Cli = Client{
 }
 
 func (c Client) Get(endpoint string) string {
-	resp, _ := c.Client.Get(fmt.Sprintf("https://127.0.0.1:8443%s", endpoint))
-	msg, _ := io.ReadAll(resp.Body)
+	resp, err := c.Client.Get(fmt.Sprintf("https://%s%s", URL_API_LXD, endpoint))
+	if err != nil {
+		log.Fatal(err)
+	}
+	msg, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 	return string(msg)
 }
 
@@ -30,13 +38,19 @@ func (c Client) Get(endpoint string) string {
 func (c Client) Post(endpoint string, data any) string {
 	jsonData, _ := json.Marshal(data)
 	reader := bytes.NewReader(jsonData)
-	resp, _ := c.Client.Post(fmt.Sprintf("https://127.0.0.1:8443%s", endpoint), "application/json", reader)
-	msg, _ := io.ReadAll(resp.Body)
+	resp, err := c.Client.Post(fmt.Sprintf("https://%s%s", URL_API_LXD, endpoint), "application/json", reader)
+	if err != nil {
+		log.Fatal(err)
+	}
+	msg, err := io.ReadAll(resp.Body)
+	if err != nil {
+		log.Fatal(err)
+	}
 	return string(msg)
 }
 
 func (c Client) Delete(endpoint string) string {
-	req, err := http.NewRequest("DELETE", fmt.Sprintf("https://127.0.0.1:8443%s", endpoint), nil)
+	req, err := http.NewRequest("DELETE", fmt.Sprintf("https://%s%s", URL_API_LXD, endpoint), nil)
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -48,7 +62,7 @@ func (c Client) Delete(endpoint string) string {
 func (c Client) Put(endpoint string, data any) string {
 	jsonData, _ := json.Marshal(data)
 	reader := bytes.NewReader(jsonData)
-	resp, _ := c.Client.Post(fmt.Sprintf("https://127.0.0.1:8443%s", endpoint), "application/json", reader)
+	resp, _ := c.Client.Post(fmt.Sprintf("https://%s%s", URL_API_LXD, endpoint), "application/json", reader)
 	msg, _ := io.ReadAll(resp.Body)
 	return string(msg)
 }
