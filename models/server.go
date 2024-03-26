@@ -49,20 +49,6 @@ func getContainers(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, GetContainersFromApi())
 }
 
-func startContainer(w http.ResponseWriter, r *http.Request) {
-	log.Print("Start a container...")
-	name := chi.URLParam(r, "name")
-	StartContainer(name)
-	w.Write([]byte(fmt.Sprint("Starting... : ", name)))
-}
-
-func stopContainer(w http.ResponseWriter, r *http.Request) {
-	log.Print("Stopping a container...")
-	name := chi.URLParam(r, "name")
-	StopContainer(name)
-	w.Write([]byte(fmt.Sprint("Stopping... : ", name)))
-}
-
 func getContainer(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting a container...")
 	name := chi.URLParam(r, "name")
@@ -160,9 +146,10 @@ func controlContainer(w http.ResponseWriter, r *http.Request) {
 	log.Print("Control a container...")
 	container := chi.URLParam(r, "container")
 	r.ParseForm()
-	action := r.FormValue("action")
-	_, _ = ControlContainerWithName(container, action)
-	w.Write([]byte("Container " + action + "ed"))
+	jsonResponse := modelsResponse.ControlContainer{}
+	json.NewDecoder(r.Body).Decode(&jsonResponse)
+	_, _ = ControlContainerWithName(container, jsonResponse.Action)
+	w.Write([]byte("Container " + jsonResponse.Action + "ed"))
 }
 
 func StartWebServer() {
@@ -194,8 +181,6 @@ func StartWebServer() {
 	r.Post("/container", createContainer)
 	r.Get("/containers", getContainers)
 	r.Get("/container/{name}", getContainer)
-	r.Put("/container/{name}/start", startContainer)
-	r.Put("/container/{name}/stop", stopContainer)
 	r.Delete("/container/{name}", deleteContainer)
 	r.Get("/container/{name}/console", consoleContainer)
 

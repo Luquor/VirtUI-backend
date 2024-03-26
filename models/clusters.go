@@ -3,7 +3,6 @@ package models
 import (
 	"encoding/json"
 	"errors"
-	"fmt"
 	"log"
 	"virtui/api"
 )
@@ -94,7 +93,6 @@ func GetContainersFromCluster(clusterName string) ([]Container, error) {
 	containersList := GetContainersFromApi()
 	var containerListForCluster []Container
 	for _, container := range containersList {
-		fmt.Println(container.Metadata.Location, clusterName)
 		if container.Metadata.Location == clusterName {
 			containerListForCluster = append(containerListForCluster, container)
 		}
