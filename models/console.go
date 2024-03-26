@@ -2,7 +2,6 @@ package models
 
 import (
 	"encoding/json"
-	"log"
 	"time"
 	"virtui/api"
 )
@@ -47,19 +46,12 @@ type consoleType struct {
 	WaitForWebsocket bool `json:"wait-for-websocket"`
 }
 
-func GetConsoleForContainer(containerName string) Console {
+func GetConsoleForContainer(containerName string) (Console, error) {
 	var console Console
 	var data consoleType
 	dataJson := "{\"command\": [\"bash\"],\"cwd\": \"/root\",\"environment\": {\"TERM\": \"xterm-256color\",\"HOME\": \"/root\"},\"interactive\": true,\"group\": 0,\"user\": 0,\"wait-for-websocket\": true}"
 	err := json.Unmarshal([]byte(dataJson), &data)
-	if err != nil {
-		log.Fatal(err)
-	}
-	// /1.0/instances/${name}/exec?wait=10
 	err = json.Unmarshal([]byte(api.Cli.Post("/1.0/instances/"+containerName+"/exec", data)), &console)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return console
+	return console, err
 
 }

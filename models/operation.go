@@ -73,19 +73,18 @@ func GetOperationWithID(id string) Operation {
 	return operationDetail
 }
 
-func GetOperationWithURL(url string) Operation {
+func GetOperationWithURL(url string) (Operation, error) {
 	var operationDetail Operation
 	err := json.Unmarshal([]byte(api.Cli.Get(url)), &operationDetail)
-	if err != nil {
-		log.Fatal(err)
-	}
-	return operationDetail
+
+	return operationDetail, err
 }
 
-func GetSocketsFromURLOperation(url string) WebSocketConsole {
-	operation := GetOperationWithURL(url)
+func GetSocketsFromURLOperation(url string) (WebSocketConsole, error) {
+	operation, err := GetOperationWithURL(url)
+	fmt.Println(url)
 	token := operation.Metadata.Metadata.(map[string]interface{})["fds"].(map[string]interface{})
-	return WebSocketConsole{Data: fmt.Sprintf("%s/websocket?secret=%s", url, token["0"]), Control: fmt.Sprintf("%s/websocket?secret=%s", url, token["control"])}
+	return WebSocketConsole{Data: fmt.Sprintf("%s/websocket?secret=%s", url, token["0"]), Control: fmt.Sprintf("%s/websocket?secret=%s", url, token["control"])}, err
 }
 
 func GetLastOperation() Operation {

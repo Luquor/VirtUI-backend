@@ -62,11 +62,24 @@ func getContainer(w http.ResponseWriter, r *http.Request) {
 	render.JSON(w, r, container)
 }
 
+type Error struct {
+	Error string `json:"error"`
+}
+
 func consoleContainer(w http.ResponseWriter, r *http.Request) {
 	log.Print("Get WebSocket Console")
 	name := chi.URLParam(r, "name")
-	test := GetConsoleForContainer(name)
-	websocket := GetSocketsFromURLOperation(test.Operation)
+	test, err := GetConsoleForContainer(name)
+	if err != nil || test.Metadata.Status == "" {
+		render.Status(r, 500)
+		render.JSON(w, r, Error{Error: "Impossible de récupèrer la console..."})
+		return
+	}
+	websocket, err := GetSocketsFromURLOperation(test.Operation)
+
+	if err != nil {
+		render.Status(r, 500)
+	}
 	render.JSON(w, r, websocket)
 }
 
