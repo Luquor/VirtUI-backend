@@ -79,7 +79,6 @@ func CreateContainer(name string, fingerprint string) Operation {
 	if err != nil {
 		log.Fatal(err)
 	}
-	fmt.Println(dataJson)
 	err = json.Unmarshal([]byte(api.Cli.Post("/1.0/instances", data)), &operation)
 	if err != nil {
 		return Operation{}
@@ -87,7 +86,6 @@ func CreateContainer(name string, fingerprint string) Operation {
 	return operation
 }
 
-// Copyright : NOAH MANDLER pour le nom de la fonction :3
 func exist(name string) bool {
 	return getIdContainerWithName(name) != 0
 }
