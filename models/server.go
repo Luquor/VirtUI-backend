@@ -48,7 +48,7 @@ func getContainers(w http.ResponseWriter, r *http.Request) {
 	// w.Write(array)
 	array, err := GetContainersFromApi()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 	render.JSON(w, r, array)
@@ -60,7 +60,7 @@ func getContainer(w http.ResponseWriter, r *http.Request) {
 
 	container, err := GetContainerWithName(name)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
@@ -86,7 +86,7 @@ func getImages(w http.ResponseWriter, r *http.Request) {
 
 	imagesList, err := GetImages()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
