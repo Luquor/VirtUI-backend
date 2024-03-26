@@ -46,7 +46,12 @@ func createContainer(w http.ResponseWriter, r *http.Request) {
 func getContainers(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting all the containers...")
 	// w.Write(array)
-	render.JSON(w, r, GetContainersFromApi())
+	array, err := GetContainersFromApi()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	render.JSON(w, r, array)
 }
 
 func getContainer(w http.ResponseWriter, r *http.Request) {
@@ -55,7 +60,7 @@ func getContainer(w http.ResponseWriter, r *http.Request) {
 
 	container, err := GetContainerWithName(name)
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
@@ -94,7 +99,7 @@ func getImages(w http.ResponseWriter, r *http.Request) {
 
 	imagesList, err := GetImages()
 	if err != nil {
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		http.Error(w, err.Error(), http.StatusNotFound)
 		return
 	}
 
@@ -104,13 +109,22 @@ func getImages(w http.ResponseWriter, r *http.Request) {
 func getClusters(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting all the clusters...")
 	// w.Write(array)
-	render.JSON(w, r, GetClustersFromApi())
+	array, err := GetClustersFromApi()
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
+	render.JSON(w, r, array)
 }
 
 func getCluster(w http.ResponseWriter, r *http.Request) {
 	log.Print("Getting a cluster...")
 	name := chi.URLParam(r, "serverName")
-	dataJson, _ := GetClusterWithName(name)
+	dataJson, err := GetClusterWithName(name)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusNotFound)
+		return
+	}
 	render.JSON(w, r, dataJson)
 }
 

@@ -118,7 +118,7 @@ func DeleteContainerWithName(name string) (string, error) {
 	return "", errors.New("Container doesn't exist")
 }
 
-func GetContainersFromApi() []Container {
+func GetContainersFromApi() ([]Container, error) {
 	var containersDetail []Container
 	var containerDetail Container
 	var containers containers
@@ -128,10 +128,10 @@ func GetContainersFromApi() []Container {
 		containersDetail = append(containersDetail, containerDetail)
 	}
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	containersList = containersDetail
-	return containersDetail
+	return containersDetail, nil
 }
 
 func StartContainer(name string) (string, error) {

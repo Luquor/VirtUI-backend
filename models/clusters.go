@@ -89,7 +89,10 @@ func DeleteContainerFromCluster(location, containerName string) Operation {
 }
 
 func GetContainersFromCluster(clusterName string) ([]Container, error) {
-	containersList := GetContainersFromApi()
+	containersList, err := GetContainersFromApi()
+	if err != nil {
+		return nil, err
+	}
 	var containerListForCluster []Container
 	for _, container := range containersList {
 		if container.Metadata.Location == clusterName {
@@ -99,7 +102,7 @@ func GetContainersFromCluster(clusterName string) ([]Container, error) {
 	return containerListForCluster, nil
 }
 
-func GetClustersFromApi() []Cluster {
+func GetClustersFromApi() ([]Cluster, error) {
 	var clustersDetail []Cluster
 	var clusterDetail Cluster
 	var clusters clusters
@@ -109,10 +112,10 @@ func GetClustersFromApi() []Cluster {
 		clustersDetail = append(clustersDetail, clusterDetail)
 	}
 	if err != nil {
-		log.Fatal(err)
+		return nil, err
 	}
 	clustersList = clustersDetail
-	return clustersDetail
+	return clustersDetail, nil
 }
 
 func GetClusterWithName(serverName string) (Cluster, error) {
