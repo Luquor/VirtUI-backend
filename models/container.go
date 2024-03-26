@@ -66,9 +66,17 @@ func GetContainersFromLocalStorage() ([]Container, error) {
 	return containersList, nil
 }
 
-func GetContainerWithName(name string) Container {
+func GetContainerWithName(name string) (Container, error) {
 	GetContainersFromApi()
-	return containersList[getIdContainerWithName(name)]
+	if len(containersList) == 0 {
+		return Container{}, errors.New("the container list is empty")
+	}
+	if !IsContainerExist(name) {
+		return Container{}, errors.New("container doesn't exist")
+	}
+
+	container := containersList[getIdContainerWithName(name)]
+	return container, nil
 }
 
 func CreateContainer(name string, fingerprint string) Operation {
@@ -125,10 +133,12 @@ func GetContainersFromApi() []Container {
 
 func StartContainer(name string) (string, error) {
 	if !IsContainerExist(name) {
-		log.Fatal("Container doesn't exist")
+		log.Fatal("container doesn't exist")
 	}
-	if GetContainerWithName(name).Metadata.Status == "Running" {
-		return "", errors.New("Container is already running")
+	container, _ := GetContainerWithName(name)
+
+	if container.Metadata.Status == "Running" {
+		return "", errors.New("container is already running")
 	}
 	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"start\"}"), nil
 }
@@ -137,8 +147,10 @@ func StopContainer(name string) (string, error) {
 	if !IsContainerExist(name) {
 		log.Fatal("Container doesn't exist")
 	}
-	if GetContainerWithName(name).Metadata.Status == "Stopped" {
-		return "", errors.New("Container is already stopped")
+	container, _ := GetContainerWithName(name)
+
+	if container.Metadata.Status == "Stopped" {
+		return "", errors.New("container is already stopped")
 	}
 	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"stop\"}"), nil
 }
@@ -147,8 +159,9 @@ func RestartContainer(name string) (string, error) {
 	if !IsContainerExist(name) {
 		log.Fatal("Container doesn't exist")
 	}
-	if GetContainerWithName(name).Metadata.Status == "Stopped" {
-		return "", errors.New("Container is already stopped")
+	container, _ := GetContainerWithName(name)
+	if container.Metadata.Status == "Stopped" {
+		return "", errors.New("container is already stopped")
 	}
 	return api.Cli.Post(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"restart\"}"), nil
 }
