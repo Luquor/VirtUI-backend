@@ -51,7 +51,6 @@ func getContainers(w http.ResponseWriter, r *http.Request) {
 		http.Error(w, err.Error(), http.StatusBadRequest)
 		return
 	}
-
 	render.JSON(w, r, array)
 }
 
