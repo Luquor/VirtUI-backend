@@ -202,9 +202,12 @@ func controlContainer(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(response))
 }
 
+// /////////////////////////////////////////////////////
+// ////////////////////////////////////////////////////
 func StartWebServer() {
-
+	CreateCache()
 	log.Print("Starting web server...")
+	//cacheClient := models.NewCacheClient()
 
 	r := chi.NewRouter()
 
@@ -220,6 +223,15 @@ func StartWebServer() {
 	}))
 
 	r.Use(render.SetContentType(render.ContentTypeJSON))
+
+	r.Use(enregistreToken)
+
+	//login
+
+	r.Use(middleware.Logger)
+	r.Post("/auth", authenticate)
+
+	//auth_middleware := gin.New()
 
 	// Image
 
