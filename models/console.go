@@ -51,6 +51,9 @@ func GetConsoleForContainer(containerName string) (Console, error) {
 	var data consoleType
 	dataJson := "{\"command\": [\"bash\"],\"cwd\": \"/root\",\"environment\": {\"TERM\": \"xterm-256color\",\"HOME\": \"/root\"},\"interactive\": true,\"group\": 0,\"user\": 0,\"wait-for-websocket\": true}"
 	err := json.Unmarshal([]byte(dataJson), &data)
+	if err != nil {
+		return Console{}, err
+	}
 	err = json.Unmarshal([]byte(api.Cli.Post("/1.0/instances/"+containerName+"/exec", data)), &console)
 	return console, err
 
