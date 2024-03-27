@@ -3,6 +3,7 @@ package models
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"log"
 	"virtui/api"
 )
@@ -73,7 +74,12 @@ func CreateContainerFromCluster(location, containerName string, fingerprint stri
 	if !clustersExist(location) {
 		log.Fatal("Cluster does not exist")
 	}
-	return CreateContainer(containerName, fingerprint, location)
+
+	operation, err := CreateContainer(containerName, fingerprint, location)
+	if err != nil {
+		fmt.Println(errors.New("error while creating the container"))
+	}
+	return operation
 }
 
 func DeleteContainerFromCluster(location, containerName string) Operation {
