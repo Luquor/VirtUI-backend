@@ -3,6 +3,7 @@ package models
 import (
 	"crypto/rand"
 	"encoding/base64"
+	"fmt"
 
 	"github.com/patrickmn/go-cache"
 )
@@ -45,6 +46,6 @@ func generateRandomToken() (string, error) {
 
 	// Convertir les octets en une chaîne base64
 	token := base64.StdEncoding.EncodeToString(tokenBytes)
-
+	fmt.Println("token:" + token)
 	return token, nil
 }
