@@ -79,12 +79,26 @@ func GetContainerWithName(name string) (Container, error) {
 	return container, nil
 }
 
-func CreateContainer(name string, fingerprint string, cluster string) Operation {
+func CreateContainer(name string, fingerprint string, cluster string) (Operation, error) {
 	if cluster == "" {
 		cluster = "(default)"
 	}
+
+	imagesList, _ := GetImages()
+	fingerprintExist := false
+	for _, image := range imagesList {
+		if image.Metadata.Fingerprint == fingerprint {
+			fingerprintExist = true
+			break
+		}
+	}
+	if !fingerprintExist {
+		return Operation{}, errors.New("fingerprint doesn't exist")
+	}
+
 	var data askCreateContainer
 	var operation Operation
+
 	dataJson := fmt.Sprintf("{\"name\":\"%s\",\"source\":{\"type\":\"image\",\"fingerprint\":\"%s\"}}", name, fingerprint)
 	err := json.Unmarshal([]byte(dataJson), &data)
 	if err != nil {
@@ -92,9 +106,10 @@ func CreateContainer(name string, fingerprint string, cluster string) Operation 
 	}
 	err = json.Unmarshal([]byte(api.Cli.Post(fmt.Sprintf("/1.0/instances?target=%s", cluster), data)), &operation)
 	if err != nil {
-		return Operation{}
+		log.Fatal(err)
 	}
-	return operation
+
+	return operation, nil
 }
 
 func exist(name string) bool {
