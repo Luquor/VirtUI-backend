@@ -17,6 +17,10 @@ type User struct {
 	Password string `json:"password`
 }
 
+type Token struct {
+	Token string
+}
+
 func enregistreToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		//fmt.Println("HEADER_AUTHORIZATION=", r.Header.Get("Auhtorization"))
@@ -24,11 +28,12 @@ func enregistreToken(next http.Handler) http.Handler {
 		if r.Header.Get("Authorization") == "" && r.RequestURI != "/auth" {
 			rw.Header().Add("WWW-Authenticate", "Bearer")
 			rw.WriteHeader(http.StatusUnauthorized)
-			http.Redirect(rw, r, "/auth", http.StatusTemporaryRedirect)
-		} else if r.Header.Get("Authorization") != "" {
+			return
+		} else if r.Header.Get("Authorization") != "" && r.RequestURI != "/auth" {
 			token := strings.Split(r.Header.Get("Authorization"), " ")
 			if !verify_token(token[1]) {
 				rw.WriteHeader(http.StatusUnauthorized)
+				return
 			}
 		}
 
@@ -37,8 +42,8 @@ func enregistreToken(next http.Handler) http.Handler {
 }
 
 func authenticate(w http.ResponseWriter, r *http.Request) {
-
-	file, err := os.Open("fichier.txt")
+	var token string
+	file, err := os.Open("users.txt")
 	if err != nil {
 		fmt.Println("Erreur lors de l'ouverture du fichier:", err)
 	}
@@ -58,11 +63,12 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 
 		if credentials[0] == jsonResponse.Username && credentials[1] == jsonResponse.Password {
 			connec = true
+			break
 		}
 
 	}
 	if connec {
-		token, err := generateRandomToken()
+		token, err = generateRandomToken()
 		fmt.Println(token)
 		if err != nil {
 			log.Panic("Erreur lors de la generation du token")
@@ -78,7 +84,8 @@ func authenticate(w http.ResponseWriter, r *http.Request) {
 		authFailed()
 		//http.Redirect(w, r, "/auth", http.StatusTemporaryRedirect)
 	}
-	render.JSON(w, r, jsonResponse)
+	var tokenJson = Token{Token: token}
+	render.JSON(w, r, tokenJson)
 
 }
 func authFailed() {
