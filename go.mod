@@ -8,9 +8,7 @@ require (
 	github.com/go-chi/render v1.0.3
 )
 
-<<<<<<< HEAD
 require github.com/ajg/form v1.5.1 // indirect
-=======
 require (
 	github.com/apache/thrift v0.14.0 // indirect
 	github.com/bytedance/sonic v1.9.1 // indirect
@@ -52,4 +50,3 @@ require (
 	github.com/stretchr/testify v1.9.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
->>>>>>> log
