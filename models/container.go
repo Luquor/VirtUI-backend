@@ -7,6 +7,7 @@ import (
 	"log"
 	"time"
 	"virtui/api"
+	"virtui/api/modelsResponse"
 )
 
 var containersList []Container
@@ -158,7 +159,12 @@ func StartContainer(name string) (string, error) {
 	if container.Metadata.Status == "Running" {
 		return "", errors.New("container is already running")
 	}
-	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"start\"}"), nil
+	var jsonData modelsResponse.ControlContainer
+	err := json.Unmarshal([]byte("{\"action\":\"start\"}"), &jsonData)
+	if err != nil {
+		return "", err
+	}
+	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), jsonData), nil
 }
 
 func StopContainer(name string) (string, error) {
@@ -170,7 +176,12 @@ func StopContainer(name string) (string, error) {
 	if container.Metadata.Status == "Stopped" {
 		return "", errors.New("container is already stopped")
 	}
-	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"stop\"}"), nil
+	var jsonData modelsResponse.ControlContainer
+	err := json.Unmarshal([]byte("{\"action\":\"stop\"}"), &jsonData)
+	if err != nil {
+		return "", err
+	}
+	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), jsonData), nil
 }
 
 func RestartContainer(name string) (string, error) {
@@ -181,7 +192,12 @@ func RestartContainer(name string) (string, error) {
 	if container.Metadata.Status == "Stopped" {
 		return "", errors.New("container is already stopped")
 	}
-	return api.Cli.Post(fmt.Sprintf("/1.0/instances/%s/state", name), "{\"action\":\"restart\"}"), nil
+	var jsonData modelsResponse.ControlContainer
+	err := json.Unmarshal([]byte("{\"action\":\"restart\"}"), &jsonData)
+	if err != nil {
+		return "", err
+	}
+	return api.Cli.Put(fmt.Sprintf("/1.0/instances/%s/state", name), jsonData), nil
 }
 
 func ControlContainerWithName(name string, action string) (string, error) {

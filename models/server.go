@@ -37,7 +37,7 @@ func createContainer(w http.ResponseWriter, r *http.Request) {
 	jsonResponse := modelsResponse.AddContainerResponse{}
 	json.NewDecoder(r.Body).Decode(&jsonResponse)
 
-	operation, err:= CreateContainer(jsonResponse.Name, jsonResponse.Fingerprint, "")
+	operation, err := CreateContainer(jsonResponse.Name, jsonResponse.Fingerprint, "")
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusNotFound)
 	}

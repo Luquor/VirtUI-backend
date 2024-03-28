@@ -62,7 +62,9 @@ func (c Client) Delete(endpoint string) string {
 func (c Client) Put(endpoint string, data any) string {
 	jsonData, _ := json.Marshal(data)
 	reader := bytes.NewReader(jsonData)
-	resp, _ := c.Client.Post(fmt.Sprintf("https://%s%s", URL_API_LXD, endpoint), "application/json", reader)
+	req, _ := http.NewRequest(http.MethodPut, fmt.Sprintf("https://%s%s", URL_API_LXD, endpoint), reader)
+	req.Header.Add("Content-Type", "application/json")
+	resp, _ := c.Client.Do(req)
 	msg, _ := io.ReadAll(resp.Body)
 	return string(msg)
 }
