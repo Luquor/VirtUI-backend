@@ -4,6 +4,7 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"fmt"
+	"time"
 
 	"github.com/patrickmn/go-cache"
 )
@@ -19,7 +20,7 @@ func CreateCache() {
 // Add_Token définit un token dans le cache ou le change
 func Add_Token(token string) {
 	cache_tokens = append(cache_tokens, token)
-	cc.Set(token, cache_tokens, cache.DefaultExpiration)
+	cc.Set(token, cache_tokens, 30*time.Minute)
 }
 
 // Cette fonction recherche le token

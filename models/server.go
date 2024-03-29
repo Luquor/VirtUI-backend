@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"log"
 	"net/http"
-	"strings"
 	"text/template"
 	"virtui/api/modelsResponse"
 
@@ -203,13 +202,6 @@ func controlContainer(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte(response))
 }
 
-func deconnection(w http.ResponseWriter, r *http.Request) {
-	token := strings.Split(r.Header.Get("Authorization"), " ")[1]
-
-	//supprimerToken(token)
-	fmt.Println(token + "token supprimé")
-}
-
 // /////////////////////////////////////////////////////
 // ////////////////////////////////////////////////////
 func StartWebServer() {
@@ -239,8 +231,6 @@ func StartWebServer() {
 	r.Use(middleware.Logger)
 	r.Post("/auth", authenticate)
 	r.Post("/deconnection", deconnection)
-
-	//auth_middleware := gin.New()
 
 	// Image
 

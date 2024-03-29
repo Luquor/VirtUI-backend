@@ -95,3 +95,9 @@ func verify_token(token string) bool {
 	_, exist := cc.Get(token)
 	return exist
 }
+func deconnection(w http.ResponseWriter, r *http.Request) {
+	token := strings.Split(r.Header.Get("Authorization"), " ")[1]
+
+	supprimerToken(token)
+	fmt.Println(token + "token supprimé")
+}
