@@ -46,7 +46,7 @@ func generateRandomToken() (string, error) {
 
 	// Convertir les octets en une chaîne base64
 	token := base64.StdEncoding.EncodeToString(tokenBytes)
-	fmt.Println("token:" + token)
+	fmt.Println("Token : " + token)
 	return token, nil
 }
 
