@@ -49,3 +49,12 @@ func generateRandomToken() (string, error) {
 	fmt.Println("token:" + token)
 	return token, nil
 }
+
+// fonction supprimant le token afin de supprimer la session utilisateur
+func supprimerToken(token string) {
+	if GetToken(token) {
+		cc.Delete(token)
+	} else {
+		panic("session introuvable")
+	}
+}
