@@ -236,8 +236,7 @@ func StartWebServer() {
 
 	r.Use(middleware.Logger)
 	r.Post("/auth", authenticate)
-
-	//auth_middleware := gin.New()
+	r.Post("/deconnection", deconnection)
 
 	// Image
 
