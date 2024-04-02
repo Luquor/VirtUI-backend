@@ -26,6 +26,7 @@ Tout les retours des fonctions de handling renvoient du JSON, facilitant ainsi l
 
 # Structure du code
 ## Code applicatif
+Puisque nous avons appris la programmation objets lors de nos cours, nous avons architecturé avec une "classe" (fichier)  pour un "objet" (structure).
 
 ### Authentification
 
