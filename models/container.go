@@ -82,7 +82,7 @@ func GetContainerWithName(name string) (Container, error) {
 
 func CreateContainer(name string, fingerprint string, cluster string) (Operation, error) {
 	if cluster == "" {
-		cluster = "(default)"
+		cluster = "yghore"
 	}
 
 	imagesList, _ := GetImages()

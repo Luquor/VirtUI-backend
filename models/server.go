@@ -45,7 +45,7 @@ func createContainer(w http.ResponseWriter, r *http.Request) {
 	fmt.Println("Création d'un container (Status) : ", operation.Status, " ...")
 	fmt.Println("Operation (status) :", GetOperationWithID(operation.Metadata.Id).Status)
 
-	w.Write([]byte(fmt.Sprintf("Creating container... : %s", jsonResponse.Name)))
+	render.JSON(w, r, operation)
 }
 
 func getContainers(w http.ResponseWriter, r *http.Request) {
