@@ -21,15 +21,26 @@ type Token struct {
 	Token string
 }
 
+var REQUEST_NOT_BLOCKED = []string{"/auth", "/"}
+
+func contains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
+}
+
 func enregistreToken(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, r *http.Request) {
 		//fmt.Println("HEADER_AUTHORIZATION=", r.Header.Get("Auhtorization"))
 
-		if r.Header.Get("Authorization") == "" && r.RequestURI != "/auth" {
+		if r.Header.Get("Authorization") == "" && !contains(REQUEST_NOT_BLOCKED, r.RequestURI) {
 			rw.Header().Add("WWW-Authenticate", "Bearer")
 			rw.WriteHeader(http.StatusUnauthorized)
 			return
-		} else if r.Header.Get("Authorization") != "" && r.RequestURI != "/auth" {
+		} else if r.Header.Get("Authorization") != "" && !contains(REQUEST_NOT_BLOCKED, r.RequestURI) {
 			token := strings.Split(r.Header.Get("Authorization"), " ")
 			if !verify_token(token[1]) {
 				rw.WriteHeader(http.StatusUnauthorized)
