@@ -141,6 +141,12 @@ func getCluster(w http.ResponseWriter, r *http.Request) {
 //		_, _ = AddClusterAddress(cluster, group)
 //		w.Write([]byte("Create cluster"))
 //	}
+
+func getOperation(w http.ResponseWriter, r *http.Request) {
+	operationID := chi.URLParam(r, "operation")
+	render.JSON(w, r, GetOperationWithID(operationID))
+}
+
 func createCluster(w http.ResponseWriter, r *http.Request) {
 	log.Print("Creating a cluster...")
 	group, _ := GetClusterGroupWithName(chi.URLParam(r, "group"))
@@ -256,6 +262,7 @@ func StartWebServer() {
 	r.Get("/cluster/{cluster}/container/{container}", redirectToSpecificContainer)
 	r.Post("/container/{container}/actions", controlContainer)
 	r.Post("/cluster/{cluster}/container/{container}/actions", controlContainer)
+	r.Get("/operation/{operation}", getOperation)
 
 	err := http.ListenAndServe(":8000", r)
 	if err != nil {
