@@ -64,10 +64,44 @@ Tout les retours des fonctions de handling renvoient du JSON, facilitant ainsi l
 
 # Structure du code
 ## Code applicatif
-Puisque nous avons appris la programmation objets lors de nos cours, nous avons architecturé avec une "classe" (fichier)  pour un "objet" (structure).
+### Structure du code
+Puisque nous avons appris la programmation objets lors de nos cours, nous avons architecturé le projet avec une "classe" (fichier)  pour un "objet" (structure).
+
+> **_NOTE :_** cela implique donc une répétition de certains morceau de code.
+
+Le projet est architecturé comme cela :
+```bash
+.
+├── api
+├── go.mod
+├── go.sum
+├── index.html
+├── main.go
+├── main_test.go
+├── models
+├── tls
+```
+Les répertoires sont plutôt éponymes.
+Dans `api/` on va y retrouver tous les fichiers concernant la communcation avec l'API de LXD :
+- **StandardReturn() :** retour présent sur toutes les structures (conteneurs, clusters, snapshots...);
+- **client.go :** créer un client (génération de clefs TLS) pour communiquer avec l'API LXD;
+
+Dans le répertoire `models/` nous avons définis toutes les structures ainsi que les méthodes utilisées pour piloter l'application :
+- **server.go :** exécution du serveur web (go-chi) et routing des pages;
+- **containers.go :** permet de contrôler les conteneurs;
+- **clusters.go :** permet de contrôler les clusters
+- **images.go :** contrôle des images LXC;
+- **console.go :** récupère les informations pour ouvrir un websocket (token, url de contrôle/envoi...); 
+
+Dans le fichier `main.go` il y a juste le lancement du serveur web.
 
 ### Authentification
 
+
+### Potentielles améliorations
+Nous pensons qu'il est possible d'améliorer la code base sur plusieurs point :
+- **Structure :** comme dit précedemment, nous avons réalisé le projet en suivant une structure "programmation objet". Il y a donc des répétitions dans le code, surtout entre `container.go` et `clusters.go`. Avec plus de temps, on aurait fait du refactoring ; par exemple définir une seule méthode `Create()` qui, en fonction de la structure/json passé en paramètre, créer un objet correspondant. Cela aurait permis de limiter la répétition du code. La même remarque peut-être faite pour les getters par id/nom ou getter local.
+- **Scripting :** pour la génération de certificats TLS, on aurait pus réalisé un script permettant de les générer.
 
 ## Tests unitaires
 
