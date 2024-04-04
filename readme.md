@@ -96,6 +96,15 @@ Dans le répertoire `models/` nous avons définis toutes les structures ainsi qu
 Dans le fichier `main.go` il y a juste le lancement du serveur web.
 
 ### Authentification
+Pour la partie authentification nous avons créé un middleware (le fichier correspondant est `middleware2.go` ) qui selon certaines conditions va renvoyer un status code http Unauthorized.
+- **Si l'en-tête Authorization est vide et que l'URI de la requête n'est pas dans "/auth" ou "/", renvoie une réponse 401.**
+- **Sinon, si l'en-tête Authorization n'est pas vide et que l'URI de la requête n'est pas dans "/auth" ou "/", vérifie le token d'authentification dans le cache du serveur** 
+- **Si le token d'authentification est invalide, renvoie une réponse 401.**
+Pour la connexion au serveur on a créé une fonction nommé 'authenticate' permettant de faire une verification des noms d'utilisateurs et des mots de passe si ces derniers correspondent à un binome <utilisateur:mot-de-passe> du fichier user.txt alors un token est généré et envoyé au client dans l'en-tête,et ce token est rajouté dans le cache du serveur .
+Cette fonction est appelé lors du requête sur la route "/auth".
+### Cache
+Pour la gestion du cache nous avons créé un fichier `cache.go` qui où sont écrits les fonctions permettant de gérer le cache du serveur .
+Nous avons un constructeur qui sera appelé par le server lors de son lancement afin d'initialiser le cache.
 
 
 ### Potentielles améliorations
@@ -103,8 +112,23 @@ Nous pensons qu'il est possible d'améliorer la code base sur plusieurs point :
 - **Structure :** comme dit précedemment, nous avons réalisé le projet en suivant une structure "programmation objet". Il y a donc des répétitions dans le code, surtout entre `container.go` et `clusters.go`. Avec plus de temps, on aurait fait du refactoring ; par exemple définir une seule méthode `Create()` qui, en fonction de la structure/json passé en paramètre, créer un objet correspondant. Cela aurait permis de limiter la répétition du code. La même remarque peut-être faite pour les getters par id/nom ou getter local.
 - **Scripting :** pour la génération de certificats TLS, on aurait pus réalisé un script permettant de les générer.
 
-## Tests unitaires
+## Tests 
+Pour les test on a opté pour des tests fonctionnels, nous avons utilisé la librairie git `github.com/stretchr/testify/assert` permettant d'utiliser des fonctions tel que assert.Equals .
+Nous avons jugé que des tests unitaires n'étaient pas intérressant ,globalement les tests se déroulent en 3 étapes.
 
+1- On lance la fonction qui sera appelé lors du clic du bouton 
+2- On vérifie à l'aide d'une commande shell et on stock le résultat de la commande
+3- On vérifie le résultat attendu 
+
+Les test sont faits de tel sorte qu'au fur et à mesure on puisse utilisé les fonctions déjà testé pour la suite (Ce n'est pas la meilleur des méthodes...)
+
+Nous avons mis en place un CI à l'aide des github actions cependant nous avons rencontré beaucoup de dificulté :
+notemment pour le service lxd .A la fin on a du abandonné car on a supposé que c'était probablement impossible (sur la fin du debug on avait une sombre histoire de socket)
+```Error: The LXD daemon doesn't appear to be started (socket path: /var/snap/lxd/common/lxd/unix.socket)```
+Ceci fut notre dernière erreur et sommes resté bloquer dessus car le service lxd était lancé et que c'était probablement une histoire d'autorisation pas très clair...
+On a opté pour un self-hosted runner dans lequel on installé tout ce qu'il fallait sur googlecloud.
+On a créé un service pour que le run.sh .
+**NOTE :** On aurait pu faire sur une machine en cours mais on ne peut pas travailler depuis chez soi (si jamais la machine est débranché pour x ou y raison)
 
 # Premier itération du front-end (SSR)
 Au début du projet, nous avions décidé de faire le front-end avec juste du HTML/CSS/JS (ou HTMX) tout cela géré par le serveur Golang (Server Side Rendering).  
