@@ -11,7 +11,6 @@ import (
 
 // cache pour le serveur
 var cc cache.Cache
-var cache_tokens []string
 
 func CreateCache() {
 	cc = *cache.New(cache.DefaultExpiration, cache.DefaultExpiration)
@@ -19,15 +18,14 @@ func CreateCache() {
 
 // Add_Token définit un token dans le cache ou le change
 func Add_Token(token string) {
-	cache_tokens = append(cache_tokens, token)
-	cc.Set(token, cache_tokens, 30*time.Minute)
+	cc.Set(token, token, 5*time.Minute)
 }
 
 // Cette fonction recherche le token
 func GetToken(token string) bool {
 	token_est_la := false
-	for i := range cache_tokens {
-		if cache_tokens[i] == token {
+	for i := range cc.Items() {
+		if i == token {
 			token_est_la = true
 		}
 	}
