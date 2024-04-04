@@ -179,8 +179,8 @@ func deleteContainerFromCluster(w http.ResponseWriter, r *http.Request) {
 	log.Print("Deleting a container from a cluster...")
 	cluster := chi.URLParam(r, "cluster")
 	container := chi.URLParam(r, "container")
-	_ = DeleteContainerFromCluster(cluster, container)
-	w.Write([]byte("Delete container from cluster"))
+	operation := DeleteContainerFromCluster(cluster, container)
+	render.JSON(w, r, operation)
 }
 
 func getContainerFromCluster(w http.ResponseWriter, r *http.Request) {
