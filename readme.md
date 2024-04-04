@@ -105,3 +105,10 @@ Nous pensons qu'il est possible d'améliorer la code base sur plusieurs point :
 
 ## Tests unitaires
 
+
+# Premier itération du front-end (SSR)
+Au début du projet, nous avions décidé de faire le front-end avec juste du HTML/CSS/JS (ou HTMX) tout cela géré par le serveur Golang (Server Side Rendering).  
+Pour éviter de faire du copier/coller de code, nous voulions utiliser les templates de Golang ce qui permet de réaliser des "composants" réutilisables.
+Nous n'avons pas réussi à mettre en place ce système car nous rencontrions des problèmes pour intégrer les templates au serveur web.
+Un moyen de contourner ce problème aurait été d'ajouter une dépendance comme `tylermmorton/tmpl` qui permet de gérer les templates HTML en plus de simplifier le workflow.  
+Nous avons donc décidé de faire le front-end en utilisant VueJS.
