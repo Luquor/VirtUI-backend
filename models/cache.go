@@ -18,7 +18,7 @@ func CreateCache() {
 
 // Add_Token définit un token dans le cache ou le change
 func Add_Token(token string) {
-	cc.Set(token, token, 5*time.Minute)
+	cc.Set(token, token, 60*time.Minute)
 }
 
 // Cette fonction recherche le token
