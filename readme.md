@@ -1,3 +1,28 @@
+# LXC, LXD & Conteneurisation
+
+LXC (Linux Container) est un système de conteneurisation qui permet l'isolation d'un système enfants (processeur, mémoire vive, réseau, système de fichier, ...).
+LXC repose (comme docker) sur les namespaces ainsi que cgroups et d'autre interface disponible dans le noyau linux.
+
+LXD est un outil qui simplifie l'utilisation de lxc, tout en offrant de nouvelles fonctionnalitées comme la possibilité de clusteriser plusieurs machines ou l'utilisation de lxd par une api restfull.
+
+# Sujet
+
+Notre sujet consiste en la mise en place d'une interface graphique (web) pour le contrôle de LXD avec différentes fonctionnalitées comme :
+
+- Gestion des clusters (Ajout, Supression)
+- Gestion des conteneurs (Start, Stop, Restart, Supression)
+- Console des conteneurs
+- Snapshot (Création & Restauration)
+
+## Dépôt Github
+
+Notre projet est divisée en deux parties :
+
+- Le backend (traitement & validations des données, communique avec lxd)
+- Le frontend (visualisation des données)
+
+Le rapport du frontend est disponible [ici](./README_FRONTEND.md)
+
 # Fonctionnement API LXD
 
 L'API RestFULL de LXD permet d'intéragir depuis différentes route HTTP pour permettre une gestion des containeurs, des clusters, des snapshots, ou encore du terminal de commande.
