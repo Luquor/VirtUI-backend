@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"strings"
 	"time"
 	"virtui/api"
 )
@@ -82,7 +83,8 @@ func GetOperationWithURL(url string) (Operation, error) {
 
 func GetSocketsFromURLOperation(url string) (WebSocketConsole, error) {
 	operation, err := GetOperationWithURL(url)
-	fmt.Println(url)
+	parts := strings.Split(url, "?")
+	url = parts[0]
 	token := operation.Metadata.Metadata.(map[string]interface{})["fds"].(map[string]interface{})
 	return WebSocketConsole{Data: fmt.Sprintf("%s/websocket?secret=%s", url, token["0"]), Control: fmt.Sprintf("%s/websocket?secret=%s", url, token["control"])}, err
 }

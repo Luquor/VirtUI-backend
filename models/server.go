@@ -166,7 +166,10 @@ func deleteCluster(w http.ResponseWriter, r *http.Request) {
 func createContainerFromCluster(w http.ResponseWriter, r *http.Request) {
 	log.Print("Creating a container from a cluster...")
 	jsonResponse := modelsResponse.AddContainerResponse{}
-	json.NewDecoder(r.Body).Decode(&jsonResponse)
+	err := json.NewDecoder(r.Body).Decode(&jsonResponse)
+	if err != nil {
+		return
+	}
 	cluster := chi.URLParam(r, "cluster")
 	operation := CreateContainerFromCluster(cluster, jsonResponse.Name, jsonResponse.Fingerprint)
 	render.JSON(w, r, operation)
